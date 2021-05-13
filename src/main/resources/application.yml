@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ged
+  h2:
+    console:
+      enabled: true
+      path: /test_db
+
+datasource:
+  url: jdbc:h2:mem:testdb
