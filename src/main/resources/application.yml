@@ -7,4 +7,5 @@ spring:
   profiles:
     include:
       - rds
+      - swagger
 
