@@ -20,7 +20,12 @@ import static com.example.ged.config.BaseResponseStatus.SUCCESS;
 @RequestMapping
 public class UserJobCategoryController {
     private final UserJobCategoryProvider userJobCategoryProvider;
-
+    /**
+     * 2021-05-15
+     * 직군 카테고리 전체 조회 API
+     * [GET] /job-categories
+     * @return
+     */
     @ResponseBody
     @GetMapping("/job-categories")
     @Operation(summary = "직군 카테고리 전체 조회 API")
