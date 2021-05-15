@@ -23,7 +23,7 @@ public class JwtService {
      * @param userIdx
      * @return String
      */
-    public String createJwt(Long userIdx) {
+    public String createJwt(int userIdx) {
         Date now = new Date();
         return Jwts.builder()
                 .claim("userIdx", userIdx)
@@ -44,7 +44,7 @@ public class JwtService {
      * @return int
      * @throws BaseException
      */
-    public Long getUserIdx() throws BaseException {
+    public int getUserIdx() throws BaseException {
         // 1. JWT 추출
         String accessToken = getJwt();
         if (accessToken == null || accessToken.length() == 0) {
@@ -60,6 +60,6 @@ public class JwtService {
             throw new BaseException(INVALID_JWT);
         }
         // 3. userIdx 추출
-        return claims.getBody().get("userIdx", Long.class);
+        return claims.getBody().get("userIdx", Integer.class);
     }
 }
