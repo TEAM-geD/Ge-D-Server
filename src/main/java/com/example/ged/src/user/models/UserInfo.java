@@ -15,6 +15,9 @@ public class UserInfo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userIdx;
 
+    @Column(name="socialId",nullable = false)
+    private String socialId;
+
     @Column(name="name",nullable = false)
     private String name;
 
@@ -27,6 +30,9 @@ public class UserInfo extends BaseEntity {
     @Column(name="introduce")
     private String introduce;
 
+    @Column(name="snsUrl",columnDefinition = "TEXT")
+    private String snsUrl;
+
     @Column(name="loginMethod",nullable = false)
     @Enumerated(EnumType.STRING)
     private LoginMethod loginMethod;
@@ -34,12 +40,14 @@ public class UserInfo extends BaseEntity {
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
 
-    private UserInfo(Integer userIdx,String name,String email,String profileImageUrl,String introduce,LoginMethod loginMethod){
+    private UserInfo(Integer userIdx,String socialId,String name,String email,String profileImageUrl,String introduce,String snsUrl,LoginMethod loginMethod){
         this.userIdx = userIdx;
+        this.socialId = socialId;
         this.name = name;
         this.email = email;
         this.profileImageUrl = profileImageUrl;
         this.introduce = introduce;
+        this.snsUrl = snsUrl;
         this.loginMethod = loginMethod;
     }
 }
