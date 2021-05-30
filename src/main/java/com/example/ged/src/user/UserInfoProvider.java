@@ -12,6 +12,7 @@ import static com.example.ged.config.BaseResponseStatus.*;
 public class UserInfoProvider {
     private final UserInfoRepository userInfoRepository;
 
+
     /**
      * socialId 로 UserInfo 찾기
      * @param socialId
