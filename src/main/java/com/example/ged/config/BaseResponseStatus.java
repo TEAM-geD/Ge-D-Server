@@ -13,19 +13,31 @@ public enum BaseResponseStatus {
     // 2000 : Request 오류
     EMPTY_JWT(false,2000,"JWT를 입력해주세요."),
     INVALID_JWT(false,2001,"유효하지 않은 JWT 입니다."),
+    EMPTY_ACCESS_TOKEN(false,2002,"ACCESS TOKEN을 입력하세요."),
+    EMPTY_DEVICE_TOKEN(false,2003,"DEVICE TOKEN을 입력하세요."),
+    EMPTY_USER_JOB(false,2004,"직군을 입력하세요."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
     NOT_FOUND_USER(false,3002,"존재자하지 않는 회원입니다."),
-    WRONG_URL(false,3003,"잘못된 URL 정보입니다."),
-    FAILED_TO_CONNECT(false,3004,"URL 연결에 실패했습니다."),
-    FAILED_TO_READ_RESPONSE(false,3005,"로그인 정보 조회에 실패했습니다."),
-    FAILED_TO_PARSE(false,3006,"파싱에 실패했습니다."),
+
+
+
+
 
 
     // 4000 : Database 오류
     SERVER_ERROR(false, 4000, "서버와의 통신에 실패하였습니다."),
-    DATABASE_ERROR(false, 4001, "데이터베이스 연결에 실패하였습니다.");
+    DATABASE_ERROR(false, 4001, "데이터베이스 연결에 실패하였습니다."),
+
+    // 5000 : 기타 오류
+    WRONG_URL(false,5001,"잘못된 URL 정보입니다."),
+    FAILED_TO_CONNECT(false,5002,"URL 연결에 실패했습니다."),
+    FAILED_TO_READ_RESPONSE(false,5003,"로그인 정보 조회에 실패했습니다."),
+    FAILED_TO_PARSE(false,5004,"파싱에 실패했습니다."),
+    FAILED_TO_KAKAO_LOGIN(false, 5005, "카카오 로그인에 실패하였습니다.")
+    ;
+
 
     private final boolean isSuccess;
     private final int code;

@@ -47,7 +47,7 @@ public class UserInfo extends BaseEntity {
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
 
-    private UserInfo(String userName, String introduce, String profileImageUrl, String deviceToken, String userJob, String isMembers, String backgroundImageUrl, String socialId){
+    public UserInfo(String userName, String introduce, String profileImageUrl, String deviceToken, String userJob, String isMembers, String backgroundImageUrl, String socialId){
         this.userName = userName;
         this.introduce = introduce;
         this.profileImageUrl = profileImageUrl;
