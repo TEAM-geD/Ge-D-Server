@@ -13,17 +13,17 @@ public class UserInfoProvider {
     private final UserInfoRepository userInfoRepository;
 
 
-    /**
-     * socialId 로 UserInfo 찾기
-     * @param socialId
-     * @return
-     * @throws BaseException
-     */
-    public UserInfo retrieveUserInfoBySocialId(String socialId) throws BaseException{
-        UserInfo userInfo = userInfoRepository.findBySocialIdAndStatus(socialId,"ACTIVE");
-        if(userInfo == null){
-            throw new BaseException(NOT_FOUND_USER);
-        }
-        return userInfo;
-    }
+//    /**
+//     * socialId 로 UserInfo 찾기
+//     * @param socialId
+//     * @return
+//     * @throws BaseException
+//     */
+//    public UserInfo retrieveUserInfoBySocialId(String socialId) throws BaseException{
+//        UserInfo userInfo = userInfoRepository.findBySocialIdAndStatus(socialId,"ACTIVE");
+//        if(userInfo == null){
+//            throw new BaseException(NOT_FOUND_USER);
+//        }
+//        return userInfo;
+//    }
 }

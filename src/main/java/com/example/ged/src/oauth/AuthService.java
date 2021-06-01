@@ -10,24 +10,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    private final KakaoLoginService kakaoLoginService;
-    /**
-     * 로그인 서비스 함수
-     * @param postLoginReq
-     * @return
-     * @throws BaseException
-     */
-    public PostLoginRes loginService(PostLoginReq postLoginReq) throws BaseException {
-        PostLoginRes postLoginRes = null;
-        if(postLoginReq.isKakaoType()){
-            postLoginRes =  kakaoLoginService.kakaoLogin(postLoginReq.getToken());
-        }
-        if(postLoginReq.isNaverType()){
-            
-        }
-        if(postLoginReq.isAppleType()){
-            
-        }
-        return postLoginRes;
-    }
+//    private final KakaoLoginService kakaoLoginService;
+//    /**
+//     * 로그인 서비스 함수
+//     * @param postLoginReq
+//     * @return
+//     * @throws BaseException
+//     */
+//    public PostLoginRes loginService(PostLoginReq postLoginReq) throws BaseException {
+//        PostLoginRes postLoginRes = null;
+//        if(postLoginReq.isKakaoType()){
+//            postLoginRes =  kakaoLoginService.kakaoLogin(postLoginReq.getToken());
+//        }
+//        if(postLoginReq.isNaverType()){
+//
+//        }
+//        if(postLoginReq.isAppleType()){
+//
+//        }
+//        return postLoginRes;
+//    }
 }
