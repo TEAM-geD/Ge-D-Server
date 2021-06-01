@@ -16,6 +16,7 @@ public enum BaseResponseStatus {
     EMPTY_ACCESS_TOKEN(false,2002,"ACCESS TOKEN을 입력하세요."),
     EMPTY_DEVICE_TOKEN(false,2003,"DEVICE TOKEN을 입력하세요."),
     EMPTY_USER_JOB(false,2004,"직군을 입력하세요."),
+    INVALID_USER_JOB(false,2005,"유효하지 않은 직군입니다. [기획자, 개발자, 디자이너] 중에 입력하세요"),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
@@ -35,7 +36,9 @@ public enum BaseResponseStatus {
     FAILED_TO_CONNECT(false,5002,"URL 연결에 실패했습니다."),
     FAILED_TO_READ_RESPONSE(false,5003,"로그인 정보 조회에 실패했습니다."),
     FAILED_TO_PARSE(false,5004,"파싱에 실패했습니다."),
-    FAILED_TO_KAKAO_LOGIN(false, 5005, "카카오 로그인에 실패하였습니다.")
+    FORBIDDEN_ACCESS(false, 5005, "접근 권한이 없습니다."),
+    FAILED_TO_KAKAO_LOGIN(false, 5006, "카카오 로그인에 실패하였습니다."),
+    FAILED_TO_NAVER_LOGIN(false, 5007, "네이버 로그인에 실패하였습니다.")
     ;
 
 

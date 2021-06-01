@@ -52,6 +52,41 @@ public class UserInfoController {
         }
     }
 
+    /**
+     * 네이버 회원가입 API
+     * [POST] /users/naver-signup
+     * @return BaseResponse<PostUserRes>
+     */
+    @ResponseBody
+    @PostMapping("/users/naver-signup")
+    public BaseResponse<PostUserRes> postNaverSignUp(@RequestBody PostSignUpReq parameters) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String accessToken = request.getHeader("NAVER-ACCESS-TOKEN");
+        String deviceToken = request.getHeader("DEVICE-TOKEN");
+
+
+        if (accessToken == null || accessToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
+        }
+        if (deviceToken == null || deviceToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
+        }
+
+        if (parameters.getUserJob() == null || parameters.getUserJob().length() == 0) {
+            return new BaseResponse<>(EMPTY_USER_JOB);
+        }
+
+        if (parameters.getUserJob() != "기획자"||parameters.getUserJob() != "개발자"||parameters.getUserJob() != "디자이너") {
+            return new BaseResponse<>(INVALID_USER_JOB);
+        }
+
+        try {
+            PostUserRes postUserRes = userInfoService.createNaverSignUp(accessToken, deviceToken, parameters);
+            return new BaseResponse<>(SUCCESS,postUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 
 }
