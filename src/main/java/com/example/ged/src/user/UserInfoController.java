@@ -42,7 +42,9 @@ public class UserInfoController {
         if (parameters.getUserJob() == null || parameters.getUserJob().length() == 0) {
             return new BaseResponse<>(EMPTY_USER_JOB);
         }
-
+        if (parameters.getUserJob() != "기획자"||parameters.getUserJob() != "개발자"||parameters.getUserJob() != "디자이너") {
+            return new BaseResponse<>(INVALID_USER_JOB);
+        }
 
         try {
             PostUserRes postUserRes = userInfoService.createKakaoSignUp(accessToken, deviceToken, parameters);
