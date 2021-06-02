@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface UserInfoRepository extends CrudRepository<UserInfo,Integer> {
     List<UserInfo> findBySocialIdAndStatus(String socialId, String active);
+
+    UserInfo findByUserIdxAndStatus(Integer userIdx, String active);
 }

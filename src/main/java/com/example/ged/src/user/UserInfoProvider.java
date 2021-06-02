@@ -1,6 +1,7 @@
 package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
+import com.example.ged.src.user.models.GetUserInfoRes;
 import com.example.ged.src.user.models.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,6 @@ public class UserInfoProvider {
 
     /**
      * Idx로 회원 조회
-     *
      * @param userIdx
      * @return User
      * @throws BaseException
@@ -64,4 +64,29 @@ public class UserInfoProvider {
         // 3. User를 return
         return userInfo;
     }
+
+    /**
+     * 유저 정보 조회 API
+     * @param userIdx
+     * @return GetUserInfoRes
+     * @throws BaseException
+     */
+    public GetUserInfoRes retrieveUserInfo(Integer userIdx) throws BaseException {
+        UserInfo userInfo;
+        try {
+            userInfo = userInfoRepository.findByUserIdxAndStatus(userIdx,"ACTIVE");
+        } catch (Exception ignored) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+        String userName = userInfo.getUserName();
+        String introduce = userInfo.getIntroduce();
+        String profileImageUrl = userInfo.getProfileImageUrl();
+        String backgroundImageUrl = userInfo.getBackgroundImageUrl();
+        String userJob = userInfo.getUserJob();
+        String isMembers = userInfo.getIsMembers();
+
+
+        return new GetUserInfoRes(userIdx,userName,introduce,profileImageUrl,backgroundImageUrl,userJob,isMembers);
+    }
+
 }

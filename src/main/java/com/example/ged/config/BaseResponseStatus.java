@@ -42,6 +42,7 @@ public enum BaseResponseStatus {
     FAILED_TO_KAKAO_SIGN_IN(false, 5008, "카카오 로그인에 실패하였습니다."),
     FAILED_TO_NAVER_SIGN_IN(false, 5009, "네이버 로그인에 실패하였습니다."),
     EXIST_USER(false, 5010, "존재하는 회원입니다. 로그인을 시도하세요"),
+    FORBIDDEN_USER(false, 5011, "해당 회원에 접근할 수 없습니다."),
     ;
 
 

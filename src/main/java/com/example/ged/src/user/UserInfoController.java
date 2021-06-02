@@ -2,6 +2,7 @@ package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
+import com.example.ged.src.user.models.GetUserInfoRes;
 import com.example.ged.src.user.models.PostSignUpReq;
 import com.example.ged.src.user.models.PostUserRes;
 import com.example.ged.utils.JwtService;
@@ -25,6 +26,7 @@ public class UserInfoController {
     /**
      * 카카오 회원가입 API
      * [POST] /users/kakao-signup
+     * @RequestBody parameters
      * @return BaseResponse<PostUserRes>
      */
     @ResponseBody
@@ -60,6 +62,7 @@ public class UserInfoController {
     /**
      * 네이버 회원가입 API
      * [POST] /users/naver-signup
+     * @RequestBody parameters
      * @return BaseResponse<PostUserRes>
      */
     @ResponseBody
@@ -167,7 +170,7 @@ public class UserInfoController {
     }
 
     /**
-     * 회원 탈퇴 API
+     * 유저 탈퇴 API
      * [PATCH] /users/status
      */
     @ResponseBody
@@ -190,32 +193,34 @@ public class UserInfoController {
         }
     }
 
-//    /**
-//     * 유저정보 조회 API
-//     * [GET] /users/:userIdx/info
-//     */
-//    @ResponseBody
-//    @GetMapping("/users/{userIdx}/info")
-//    public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable Long userIdx) {
-//        Long jwtUserIdx;
-//        try {
-//            jwtUserIdx = jwtService.getUserIdx();
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//
-//
-//        if(userIdx != jwtUserIdx){
-//            throw new BaseException(FORBIDDEN_USER);
-//        }
-//
-//
-//        try {
-//            GetUserInfoRes getUserInfoRes = userInfoProvider.retrieveUserInfo(userIdx);
-//            return new BaseResponse<>(SUCCESS,getUserInfoRes);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//    }
+    /**
+     * 유저 정보 조회 API
+     * [GET] /users/:userIdx/info
+     * @PathVariable userIdx
+     * @return BaseResponse<GetUserInfoRes>
+     */
+    @ResponseBody
+    @GetMapping("/users/{userIdx}/info")
+    public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable Integer userIdx) throws BaseException {
+        Integer jwtUserIdx;
+        try {
+            jwtUserIdx = jwtService.getUserIdx();
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+
+        if(userIdx != jwtUserIdx){
+            throw new BaseException(FORBIDDEN_USER);
+        }
+
+
+        try {
+            GetUserInfoRes getUserInfoRes = userInfoProvider.retrieveUserInfo(userIdx);
+            return new BaseResponse<>(SUCCESS,getUserInfoRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }
