@@ -4,6 +4,7 @@ import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.src.user.models.PostSignUpReq;
 import com.example.ged.src.user.models.PostUserRes;
+import com.example.ged.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,6 +19,8 @@ import static com.example.ged.config.BaseResponseStatus.*;
 @RequestMapping
 public class UserInfoController {
     private final UserInfoService userInfoService;
+    private final JwtService jwtService;
+    private final UserInfoProvider userInfoProvider;
 
     /**
      * 카카오 회원가입 API
@@ -145,5 +148,23 @@ public class UserInfoController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /**
+     * 자동 로그인 API
+     * [POST] /users/auto-signin
+     */
+    @ResponseBody
+    @PostMapping("/users/auto-signin")
+    public BaseResponse<Void> postAutoSignIn() {
+
+        try {
+            Long userIdx = jwtService.getUserIdx();
+            userInfoProvider.retrieveUserByUserIdx(userIdx);
+            return new BaseResponse<>(SUCCESS);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 
 }
