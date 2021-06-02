@@ -37,8 +37,9 @@ public enum BaseResponseStatus {
     FAILED_TO_READ_RESPONSE(false,5003,"로그인 정보 조회에 실패했습니다."),
     FAILED_TO_PARSE(false,5004,"파싱에 실패했습니다."),
     FORBIDDEN_ACCESS(false, 5005, "접근 권한이 없습니다."),
-    FAILED_TO_KAKAO_LOGIN(false, 5006, "카카오 로그인에 실패하였습니다."),
-    FAILED_TO_NAVER_LOGIN(false, 5007, "네이버 로그인에 실패하였습니다.")
+    FAILED_TO_KAKAO_SIGN_UP(false, 5006, "카카오 회원가입에 실패하였습니다."),
+    FAILED_TO_NAVER_SIGN_UP(false, 5007, "네이버 회원가입에 실패하였습니다."),
+    FAILED_TO_KAKAO_SIGN_IN(false, 5008, "카카오 로그인에 실패하였습니다."),
     ;
 
 
