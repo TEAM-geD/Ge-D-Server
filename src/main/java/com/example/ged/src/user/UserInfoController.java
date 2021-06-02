@@ -166,5 +166,28 @@ public class UserInfoController {
         }
     }
 
+    /**
+     * 회원 탈퇴 API
+     * [DELETE] /users/status
+     */
+    @ResponseBody
+    @PatchMapping("/users/status")
+    public BaseResponse<Void> patchUserStatus() {
+
+
+        Long userIdx;
+        try {
+            userIdx = jwtService.getUserIdx();
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+        try {
+            userInfoService.updateUserStatus(userIdx);
+            return new BaseResponse<>(SUCCESS);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }

@@ -523,4 +523,22 @@ public class UserInfoService {
         }
     }
 
+
+    /**
+     * 회원 탈퇴 API
+     * @throws BaseException
+     */
+    public void updateUserStatus(Long userIdx) throws BaseException {
+
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+
+        userInfo.setStatus("INACTIVE");
+        try {
+            userInfo = userInfoRepository.save(userInfo);
+        } catch (Exception ignored) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 }
