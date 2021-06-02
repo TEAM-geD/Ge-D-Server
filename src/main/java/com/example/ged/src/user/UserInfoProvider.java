@@ -1,11 +1,13 @@
 package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
+import com.example.ged.src.user.models.GetMembersRes;
 import com.example.ged.src.user.models.GetUserInfoRes;
 import com.example.ged.src.user.models.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.ged.config.BaseResponseStatus.*;
@@ -88,5 +90,30 @@ public class UserInfoProvider {
 
         return new GetUserInfoRes(userIdx,userName,introduce,profileImageUrl,backgroundImageUrl,userJob,isMembers);
     }
+
+    /**
+     * 멤버스 리스트 조회 API
+     * @param job
+     * @return List<GetMembersRes>
+     * @throws BaseException
+     */
+    public List<GetMembersRes> retrieveMembers(String job) throws BaseException {
+        List<UserInfo> userInfoList = userInfoRepository.findByUserJobAndIsMembersAndStatus(job,"Y","ACTIVE");
+
+        List<GetMembersRes> getMembersResList = new ArrayList<>();
+        for(int i = 0 ; i < userInfoList.size() ; i++){
+            Integer userIdx = userInfoList.get(i).getUserIdx();
+            String userName = userInfoList.get(i).getUserName();
+            String introduce = userInfoList.get(i).getIntroduce();
+            String profileImageUrl = userInfoList.get(i).getProfileImageUrl();
+            String backgroundImageUrl = userInfoList.get(i).getBackgroundImageUrl();
+            String userJob = userInfoList.get(i).getUserJob();
+            GetMembersRes getMembersRes = new GetMembersRes(userIdx, userName, introduce, profileImageUrl, backgroundImageUrl, userJob);
+            getMembersResList.add(getMembersRes);
+
+        }
+        return  getMembersResList;
+    }
+
 
 }
