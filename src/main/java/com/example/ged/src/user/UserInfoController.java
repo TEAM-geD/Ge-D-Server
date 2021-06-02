@@ -11,6 +11,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.List;
+
 import static com.example.ged.config.BaseResponseStatus.*;
 
 @RestController
@@ -267,5 +269,33 @@ public class UserInfoController {
         }
     }
 
+    /**
+     * 멤버스 리스트 조회 API
+     * [GET] /members?job=developer
+     * @PathVariable userIdx
+     * @return BaseResponse<GetUserInfoRes>
+     */
+    @ResponseBody
+    @GetMapping("/members")
+    public BaseResponse<List<GetMembersRes>> getMembers(@RequestParam String job) throws BaseException {
+        Integer jwtUserIdx;
+        try {
+            jwtUserIdx = jwtService.getUserIdx();
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
 
+
+        if (job != "기획자"|| job != "개발자"|| job != "디자이너") {
+            return new BaseResponse<>(INVALID_USER_JOB);
+        }
+
+
+        try {
+            List<GetMembersRes> getMembersResList = userInfoProvider.retrieveMembers(job);
+            return new BaseResponse<>(SUCCESS,getMembersResList);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }
