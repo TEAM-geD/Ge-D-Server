@@ -4,6 +4,7 @@ import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.src.user.models.PostSignUpReq;
 import com.example.ged.src.user.models.PostUserRes;
+import com.example.ged.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -18,6 +19,8 @@ import static com.example.ged.config.BaseResponseStatus.*;
 @RequestMapping
 public class UserInfoController {
     private final UserInfoService userInfoService;
+    private final JwtService jwtService;
+    private final UserInfoProvider userInfoProvider;
 
     /**
      * 카카오 회원가입 API
@@ -85,6 +88,79 @@ public class UserInfoController {
         try {
             PostUserRes postUserRes = userInfoService.createNaverSignUp(accessToken, deviceToken, parameters);
             return new BaseResponse<>(SUCCESS,postUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 카카오 로그인 API
+     * [POST] /users/kakao-signin
+     * @return BaseResponse<PostUserRes>
+     */
+    @ResponseBody
+    @PostMapping("/users/kakao-signin")
+    public BaseResponse<PostUserRes> postKakaoSignIn() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String accessToken = request.getHeader("KAKAO-ACCESS-TOKEN");
+        String deviceToken = request.getHeader("DEVICE-TOKEN");
+
+
+        if (accessToken == null || accessToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
+        }
+        if (deviceToken == null || deviceToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
+        }
+
+        try {
+            PostUserRes postUserRes = userInfoService.createKakaoSignIn(accessToken, deviceToken);
+            return new BaseResponse<>(SUCCESS,postUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 네이버 로그인 API
+     * [POST] /users/naver-signin
+     * @return BaseResponse<PostUserRes>
+     */
+    @ResponseBody
+    @PostMapping("/users/naver-signin")
+    public BaseResponse<PostUserRes> postNaverSignIn() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String accessToken = request.getHeader("KAKAO-ACCESS-TOKEN");
+        String deviceToken = request.getHeader("DEVICE-TOKEN");
+
+
+        if (accessToken == null || accessToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
+        }
+        if (deviceToken == null || deviceToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
+        }
+
+        try {
+            PostUserRes postUserRes = userInfoService.createNaverSignIn(accessToken, deviceToken);
+            return new BaseResponse<>(SUCCESS,postUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 자동 로그인 API
+     * [POST] /users/auto-signin
+     */
+    @ResponseBody
+    @PostMapping("/users/auto-signin")
+    public BaseResponse<Void> postAutoSignIn() {
+
+        try {
+            Long userIdx = jwtService.getUserIdx();
+            userInfoProvider.retrieveUserByUserIdx(userIdx);
+            return new BaseResponse<>(SUCCESS);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }

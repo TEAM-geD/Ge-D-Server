@@ -40,17 +40,28 @@ public class UserInfoProvider {
         return userInfo;
     }
 
-//    /**
-//     * socialId 로 UserInfo 찾기
-//     * @param socialId
-//     * @return
-//     * @throws BaseException
-//     */
-//    public UserInfo retrieveUserInfoBySocialId(String socialId) throws BaseException{
-//        UserInfo userInfo = userInfoRepository.findBySocialIdAndStatus(socialId,"ACTIVE");
-//        if(userInfo == null){
-//            throw new BaseException(NOT_FOUND_USER);
-//        }
-//        return userInfo;
-//    }
+    /**
+     * Idx로 회원 조회
+     *
+     * @param userIdx
+     * @return User
+     * @throws BaseException
+     */
+    public UserInfo retrieveUserByUserIdx(Long userIdx) throws BaseException {
+        // 1. DB에서 User 조회
+        UserInfo userInfo;
+        try {
+            userInfo = userInfoRepository.findById(Math.toIntExact(userIdx)).orElse(null); // userIdx int로 수정하기
+        } catch (Exception ignored) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+        // 2. 존재하는 회원인지 확인
+        if (userInfo == null || !userInfo.getStatus().equals("ACTIVE")) {
+            throw new BaseException(NOT_FOUND_USER);
+        }
+
+        // 3. User를 return
+        return userInfo;
+    }
 }
