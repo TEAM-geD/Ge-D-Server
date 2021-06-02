@@ -1,9 +1,7 @@
 package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
-import com.example.ged.src.user.models.PostSignUpReq;
-import com.example.ged.src.user.models.PostUserRes;
-import com.example.ged.src.user.models.UserInfo;
+import com.example.ged.src.user.models.*;
 import com.example.ged.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -538,6 +536,42 @@ public class UserInfoService {
         } catch (Exception ignored) {
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    /**
+     * 유저 정보 수정 API
+     * @param userIdx,parameters
+     * @return PatchUserInfoRes
+     * @throws BaseException
+     */
+    public PatchUserInfoRes updateUserInfo(Integer jwtUserIdx, Integer userIdx, PatchUserInfoReq patchUserInfoReq) throws BaseException {
+        //jwt 확인
+        if(userIdx != jwtUserIdx){
+            throw new BaseException(FORBIDDEN_USER);
+        }
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(jwtUserIdx);
+
+        String userName = patchUserInfoReq.getUserName();
+        String introduce = patchUserInfoReq.getIntroduce();
+        String profileImageUrl = patchUserInfoReq.getProfileImageUrl();
+        String backgroundImageUrl = patchUserInfoReq.getBackgroundImageUrl();
+        String userJob = patchUserInfoReq.getUserJob();
+        String isMembers = patchUserInfoReq.getIsMembers();
+
+        userInfo.setUserName(userName);
+        userInfo.setIntroduce(introduce);
+        userInfo.setProfileImageUrl(profileImageUrl);
+        userInfo.setBackgroundImageUrl(backgroundImageUrl);
+        userInfo.setUserJob(userJob);
+        userInfo.setIsMembers(isMembers);
+        try {
+            userInfo = userInfoRepository.save(userInfo);
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+
+
+        return new PatchUserInfoRes(userIdx,userName,introduce,profileImageUrl,backgroundImageUrl,userJob,isMembers);
     }
 
 

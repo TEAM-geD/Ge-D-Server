@@ -16,7 +16,11 @@ public enum BaseResponseStatus {
     EMPTY_ACCESS_TOKEN(false,2002,"ACCESS TOKEN을 입력하세요."),
     EMPTY_DEVICE_TOKEN(false,2003,"DEVICE TOKEN을 입력하세요."),
     EMPTY_USER_JOB(false,2004,"직군을 입력하세요."),
-    INVALID_USER_JOB(false,2005,"유효하지 않은 직군입니다. [기획자, 개발자, 디자이너] 중에 입력하세요"),
+    INVALID_USER_JOB(false,2005,"유효하지 않은 직군입니다. [기획자, 개발자, 디자이너] 중에 입력하세요."),
+    EMPTY_USER_NAME(false,2006,"유저 이름을 입력하세요."),
+    INVALID_INTRODUCE_LENGTH(false,2007,"소개글은 40자 이하여야 합니다."),
+    EMPTY_IS_MEMBERS(false,2008,"멤버스 여부를 입력하세요."),
+    INVALID_IS_MEMBERS(false,2009,"멤버스 여부는 [Y, N] 중에 입력하세요."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),

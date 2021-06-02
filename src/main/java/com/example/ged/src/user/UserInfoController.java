@@ -2,9 +2,7 @@ package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
-import com.example.ged.src.user.models.GetUserInfoRes;
-import com.example.ged.src.user.models.PostSignUpReq;
-import com.example.ged.src.user.models.PostUserRes;
+import com.example.ged.src.user.models.*;
 import com.example.ged.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -222,5 +220,52 @@ public class UserInfoController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+
+    /**
+     * 유저 정보 수정 API
+     * [PATCH] /users/:userIdx/info
+     * @RequestBody patchUserInfoReq
+     * @PathVariable userIdx
+     * @return BaseResponse<PatchUserInfoRes>
+     */
+    @ResponseBody
+    @PatchMapping("/users/{userIdx}/info")
+    public BaseResponse<PatchUserInfoRes> patchUserInfo(@PathVariable Integer userIdx, @RequestBody PatchUserInfoReq patchUserInfoReq) throws BaseException {
+        Integer jwtUserIdx;
+        try {
+            jwtUserIdx = jwtService.getUserIdx();
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+        if (patchUserInfoReq.getUserName() == null || patchUserInfoReq.getUserName().length() == 0 ) {
+            return new BaseResponse<>(EMPTY_USER_NAME);
+        }
+        if (patchUserInfoReq.getIntroduce() != null && patchUserInfoReq.getIntroduce().length() > 40 ) {
+            return new BaseResponse<>(INVALID_INTRODUCE_LENGTH);
+        }
+        if (patchUserInfoReq.getUserJob() == null || patchUserInfoReq.getUserJob().length() == 0) {
+            return new BaseResponse<>(EMPTY_USER_JOB);
+        }
+        if (patchUserInfoReq.getUserJob() != "기획자"||patchUserInfoReq.getUserJob() != "개발자"||patchUserInfoReq.getUserJob() != "디자이너") {
+            return new BaseResponse<>(INVALID_USER_JOB);
+        }
+        if (patchUserInfoReq.getIsMembers() == null || patchUserInfoReq.getIsMembers().length() == 0) {
+            return new BaseResponse<>(EMPTY_IS_MEMBERS);
+        }
+        if (patchUserInfoReq.getIsMembers() != "Y"||patchUserInfoReq.getIsMembers() != "N") {
+            return new BaseResponse<>(INVALID_IS_MEMBERS);
+        }
+
+
+        try {
+            PatchUserInfoRes patchUserInfoRes = userInfoService.updateUserInfo(jwtUserIdx, userIdx, patchUserInfoReq);
+            return new BaseResponse<>(SUCCESS,patchUserInfoRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 
 }
