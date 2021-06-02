@@ -158,7 +158,7 @@ public class UserInfoController {
     public BaseResponse<Void> postAutoSignIn() {
 
         try {
-            Long userIdx = jwtService.getUserIdx();
+            Integer userIdx = jwtService.getUserIdx();
             userInfoProvider.retrieveUserByUserIdx(userIdx);
             return new BaseResponse<>(SUCCESS);
         } catch (BaseException exception) {
@@ -168,14 +168,14 @@ public class UserInfoController {
 
     /**
      * 회원 탈퇴 API
-     * [DELETE] /users/status
+     * [PATCH] /users/status
      */
     @ResponseBody
     @PatchMapping("/users/status")
     public BaseResponse<Void> patchUserStatus() {
 
 
-        Long userIdx;
+        Integer userIdx;
         try {
             userIdx = jwtService.getUserIdx();
         } catch (BaseException exception) {
@@ -189,5 +189,33 @@ public class UserInfoController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+//    /**
+//     * 유저정보 조회 API
+//     * [GET] /users/:userIdx/info
+//     */
+//    @ResponseBody
+//    @GetMapping("/users/{userIdx}/info")
+//    public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable Long userIdx) {
+//        Long jwtUserIdx;
+//        try {
+//            jwtUserIdx = jwtService.getUserIdx();
+//        } catch (BaseException exception) {
+//            return new BaseResponse<>(exception.getStatus());
+//        }
+//
+//
+//        if(userIdx != jwtUserIdx){
+//            throw new BaseException(FORBIDDEN_USER);
+//        }
+//
+//
+//        try {
+//            GetUserInfoRes getUserInfoRes = userInfoProvider.retrieveUserInfo(userIdx);
+//            return new BaseResponse<>(SUCCESS,getUserInfoRes);
+//        } catch (BaseException exception) {
+//            return new BaseResponse<>(exception.getStatus());
+//        }
+//    }
 
 }

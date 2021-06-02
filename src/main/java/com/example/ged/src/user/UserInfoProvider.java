@@ -47,11 +47,11 @@ public class UserInfoProvider {
      * @return User
      * @throws BaseException
      */
-    public UserInfo retrieveUserByUserIdx(Long userIdx) throws BaseException {
+    public UserInfo retrieveUserByUserIdx(Integer userIdx) throws BaseException {
         // 1. DB에서 User 조회
         UserInfo userInfo;
         try {
-            userInfo = userInfoRepository.findById(Math.toIntExact(userIdx)).orElse(null); // userIdx int로 수정하기
+            userInfo = userInfoRepository.findById(userIdx).orElse(null);
         } catch (Exception ignored) {
             throw new BaseException(DATABASE_ERROR);
         }

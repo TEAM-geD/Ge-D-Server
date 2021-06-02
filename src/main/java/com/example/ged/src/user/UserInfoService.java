@@ -145,7 +145,7 @@ public class UserInfoService {
 
         // JWT 생성
         try {
-            Long userIdx = userInfo.getUserIdx();
+            Integer userIdx = userInfo.getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
             return new PostUserRes(userIdx, jwt);
         }catch(Exception e){
@@ -276,7 +276,7 @@ public class UserInfoService {
 
         // JWT 생성
         try {
-            Long userIdx = userInfo.getUserIdx();
+            Integer userIdx = userInfo.getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
             return new PostUserRes(userIdx, jwt);
         }catch(Exception e){
@@ -399,7 +399,7 @@ public class UserInfoService {
                 throw new BaseException(DATABASE_ERROR);
             }
             String jwt = jwtService.createJwt(userInfo.getUserIdx());
-            Long useridx = userInfo.getUserIdx();
+            Integer useridx = userInfo.getUserIdx();
             return new PostUserRes(useridx, jwt);
         }
     }
@@ -518,7 +518,7 @@ public class UserInfoService {
                 throw new BaseException(DATABASE_ERROR);
             }
             String jwt = jwtService.createJwt(userInfo.getUserIdx());
-            Long useridx = userInfo.getUserIdx();
+            Integer useridx = userInfo.getUserIdx();
             return new PostUserRes(useridx, jwt);
         }
     }
@@ -528,7 +528,7 @@ public class UserInfoService {
      * 회원 탈퇴 API
      * @throws BaseException
      */
-    public void updateUserStatus(Long userIdx) throws BaseException {
+    public void updateUserStatus(Integer userIdx) throws BaseException {
 
         UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
 
