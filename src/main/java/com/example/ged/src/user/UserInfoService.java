@@ -28,11 +28,11 @@ public class UserInfoService {
 
     /**
      * 카카오 회원가입
-     * @param accessToken,deviceToken,parameters
+     * @param accessToken,deviceToken,postSignUpReq
      * @return PostUserRes
      * @throws BaseException
      */
-    public PostUserRes createKakaoSignUp(String accessToken, String deviceToken, PostSignUpReq parameters) throws BaseException {
+    public PostUserRes createKakaoSignUp(String accessToken, String deviceToken, PostSignUpReq postSignUpReq) throws BaseException {
         JSONObject jsonObject;
 
         String header = "Bearer " + accessToken; // Bearer 다음에 공백 추가
@@ -125,7 +125,7 @@ public class UserInfoService {
 
         UserInfo userInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
 
-        String userJob = parameters.getUserJob();
+        String userJob = postSignUpReq.getUserJob();
 
         // 이미 존재하는 회원이 없다면 유저 정보 저장
         if (userInfo == null) {
@@ -153,11 +153,11 @@ public class UserInfoService {
 
     /**
      * 네이버 회원가입
-     * @param accessToken,deviceToken,parameters
+     * @param accessToken,deviceToken,postSignUpReq
      * @return PostUserRes
      * @throws BaseException
      */
-    public PostUserRes createNaverSignUp(String accessToken, String deviceToken, PostSignUpReq parameters) throws BaseException {
+    public PostUserRes createNaverSignUp(String accessToken, String deviceToken, PostSignUpReq postSignUpReq) throws BaseException {
         JSONObject jsonObject;
         String resultcode;
 
@@ -256,7 +256,7 @@ public class UserInfoService {
         }
         UserInfo userInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
 
-        String userJob = parameters.getUserJob();
+        String userJob = postSignUpReq.getUserJob();
 
         // 이미 존재하는 회원이 없다면 유저 정보 저장
         if (userInfo == null) {

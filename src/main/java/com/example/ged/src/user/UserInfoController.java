@@ -60,12 +60,12 @@ public class UserInfoController {
     /**
      * 네이버 회원가입 API
      * [POST] /users/naver-signup
-     * @RequestBody parameters
+     * @RequestBody postSignUpReq
      * @return BaseResponse<PostUserRes>
      */
     @ResponseBody
     @PostMapping("/users/naver-signup")
-    public BaseResponse<PostUserRes> postNaverSignUp(@RequestBody PostSignUpReq parameters) {
+    public BaseResponse<PostUserRes> postNaverSignUp(@RequestBody PostSignUpReq postSignUpReq) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String accessToken = request.getHeader("NAVER-ACCESS-TOKEN");
         String deviceToken = request.getHeader("DEVICE-TOKEN");
@@ -78,16 +78,16 @@ public class UserInfoController {
             return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
         }
 
-        if (parameters.getUserJob() == null || parameters.getUserJob().length() == 0) {
+        if (postSignUpReq.getUserJob() == null || postSignUpReq.getUserJob().length() == 0) {
             return new BaseResponse<>(EMPTY_USER_JOB);
         }
 
-        if (parameters.getUserJob() != "기획자"||parameters.getUserJob() != "개발자"||parameters.getUserJob() != "디자이너") {
+        if (postSignUpReq.getUserJob() != "기획자"|| postSignUpReq.getUserJob() != "개발자"|| postSignUpReq.getUserJob() != "디자이너") {
             return new BaseResponse<>(INVALID_USER_JOB);
         }
 
         try {
-            PostUserRes postUserRes = userInfoService.createNaverSignUp(accessToken, deviceToken, parameters);
+            PostUserRes postUserRes = userInfoService.createNaverSignUp(accessToken, deviceToken, postSignUpReq);
             return new BaseResponse<>(SUCCESS,postUserRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
