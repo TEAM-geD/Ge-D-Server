@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class PostUserRes {
-    private final Long userIdx;
+    private final Integer userIdx;
     private final String jwt;
 }

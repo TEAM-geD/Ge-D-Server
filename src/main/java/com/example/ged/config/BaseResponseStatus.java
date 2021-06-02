@@ -16,11 +16,18 @@ public enum BaseResponseStatus {
     EMPTY_ACCESS_TOKEN(false,2002,"ACCESS TOKEN을 입력하세요."),
     EMPTY_DEVICE_TOKEN(false,2003,"DEVICE TOKEN을 입력하세요."),
     EMPTY_USER_JOB(false,2004,"직군을 입력하세요."),
-    INVALID_USER_JOB(false,2005,"유효하지 않은 직군입니다. [기획자, 개발자, 디자이너] 중에 입력하세요"),
+    INVALID_USER_JOB(false,2005,"유효하지 않은 직군입니다. [기획자, 개발자, 디자이너] 중에 입력하세요."),
+    EMPTY_USER_NAME(false,2006,"유저 이름을 입력하세요."),
+    INVALID_INTRODUCE_LENGTH(false,2007,"소개글은 40자 이하여야 합니다."),
+    EMPTY_IS_MEMBERS(false,2008,"멤버스 여부를 입력하세요."),
+    INVALID_IS_MEMBERS(false,2009,"멤버스 여부는 [Y, N] 중에 입력하세요."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
     NOT_FOUND_USER(false,3002,"존재하지 않는 회원입니다."),
+    FAILED_TO_SAVE_USERINFO(false,3003,"UserInfo를 저장할 수 없습니다."),
+    FAILED_TO_FIND_BY_USERIDX_AND_STATUS(false,3004,"userIdx와 status로 UserInfo 조회에 실패했습니다."),
+    FAILED_TO_FIND_BY_SOCIALID_AND_STATUS(false,3005,"socialId와 status로 UserInfo 조회에 실패했습니다."),
 
 
 
@@ -42,6 +49,7 @@ public enum BaseResponseStatus {
     FAILED_TO_KAKAO_SIGN_IN(false, 5008, "카카오 로그인에 실패하였습니다."),
     FAILED_TO_NAVER_SIGN_IN(false, 5009, "네이버 로그인에 실패하였습니다."),
     EXIST_USER(false, 5010, "존재하는 회원입니다. 로그인을 시도하세요"),
+    FORBIDDEN_USER(false, 5011, "해당 회원에 접근할 수 없습니다."),
     ;
 
 

@@ -1,9 +1,7 @@
 package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
-import com.example.ged.src.user.models.PostSignUpReq;
-import com.example.ged.src.user.models.PostUserRes;
-import com.example.ged.src.user.models.UserInfo;
+import com.example.ged.src.user.models.*;
 import com.example.ged.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -30,11 +28,11 @@ public class UserInfoService {
 
     /**
      * 카카오 회원가입
-     * @param accessToken,deviceToken,parameters
+     * @param accessToken,deviceToken,postSignUpReq
      * @return PostUserRes
      * @throws BaseException
      */
-    public PostUserRes createKakaoSignUp(String accessToken, String deviceToken, PostSignUpReq parameters) throws BaseException {
+    public PostUserRes createKakaoSignUp(String accessToken, String deviceToken, PostSignUpReq postSignUpReq) throws BaseException {
         JSONObject jsonObject;
 
         String header = "Bearer " + accessToken; // Bearer 다음에 공백 추가
@@ -127,7 +125,7 @@ public class UserInfoService {
 
         UserInfo userInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
 
-        String userJob = parameters.getUserJob();
+        String userJob = postSignUpReq.getUserJob();
 
         // 이미 존재하는 회원이 없다면 유저 정보 저장
         if (userInfo == null) {
@@ -136,7 +134,7 @@ public class UserInfoService {
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
         }
         else{
@@ -145,7 +143,7 @@ public class UserInfoService {
 
         // JWT 생성
         try {
-            Long userIdx = userInfo.getUserIdx();
+            Integer userIdx = userInfo.getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
             return new PostUserRes(userIdx, jwt);
         }catch(Exception e){
@@ -155,11 +153,11 @@ public class UserInfoService {
 
     /**
      * 네이버 회원가입
-     * @param accessToken,deviceToken,parameters
+     * @param accessToken,deviceToken,postSignUpReq
      * @return PostUserRes
      * @throws BaseException
      */
-    public PostUserRes createNaverSignUp(String accessToken, String deviceToken, PostSignUpReq parameters) throws BaseException {
+    public PostUserRes createNaverSignUp(String accessToken, String deviceToken, PostSignUpReq postSignUpReq) throws BaseException {
         JSONObject jsonObject;
         String resultcode;
 
@@ -258,7 +256,7 @@ public class UserInfoService {
         }
         UserInfo userInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
 
-        String userJob = parameters.getUserJob();
+        String userJob = postSignUpReq.getUserJob();
 
         // 이미 존재하는 회원이 없다면 유저 정보 저장
         if (userInfo == null) {
@@ -267,7 +265,7 @@ public class UserInfoService {
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
         }
         else{
@@ -276,7 +274,7 @@ public class UserInfoService {
 
         // JWT 생성
         try {
-            Long userIdx = userInfo.getUserIdx();
+            Integer userIdx = userInfo.getUserIdx();
             String jwt = jwtService.createJwt(userIdx);
             return new PostUserRes(userIdx, jwt);
         }catch(Exception e){
@@ -396,10 +394,10 @@ public class UserInfoService {
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
             String jwt = jwtService.createJwt(userInfo.getUserIdx());
-            Long useridx = userInfo.getUserIdx();
+            Integer useridx = userInfo.getUserIdx();
             return new PostUserRes(useridx, jwt);
         }
     }
@@ -515,12 +513,66 @@ public class UserInfoService {
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
             String jwt = jwtService.createJwt(userInfo.getUserIdx());
-            Long useridx = userInfo.getUserIdx();
+            Integer useridx = userInfo.getUserIdx();
             return new PostUserRes(useridx, jwt);
         }
     }
+
+
+    /**
+     * 유저 탈퇴 API
+     * @throws BaseException
+     */
+    public void updateUserStatus(Integer jwtUserIdx) throws BaseException {
+
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(jwtUserIdx);
+
+        userInfo.setStatus("INACTIVE");
+        try {
+            userInfo = userInfoRepository.save(userInfo);
+        } catch (Exception ignored) {
+            throw new BaseException(FAILED_TO_SAVE_USERINFO);
+        }
+    }
+
+    /**
+     * 유저 정보 수정 API
+     * @param userIdx,parameters
+     * @return PatchUserInfoRes
+     * @throws BaseException
+     */
+    public PatchUserInfoRes updateUserInfo(Integer jwtUserIdx, Integer userIdx, PatchUserInfoReq patchUserInfoReq) throws BaseException {
+        //jwt 확인
+        if(userIdx != jwtUserIdx){
+            throw new BaseException(FORBIDDEN_USER);
+        }
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(jwtUserIdx);
+
+        String userName = patchUserInfoReq.getUserName();
+        String introduce = patchUserInfoReq.getIntroduce();
+        String profileImageUrl = patchUserInfoReq.getProfileImageUrl();
+        String backgroundImageUrl = patchUserInfoReq.getBackgroundImageUrl();
+        String userJob = patchUserInfoReq.getUserJob();
+        String isMembers = patchUserInfoReq.getIsMembers();
+
+        userInfo.setUserName(userName);
+        userInfo.setIntroduce(introduce);
+        userInfo.setProfileImageUrl(profileImageUrl);
+        userInfo.setBackgroundImageUrl(backgroundImageUrl);
+        userInfo.setUserJob(userJob);
+        userInfo.setIsMembers(isMembers);
+        try {
+            userInfo = userInfoRepository.save(userInfo);
+        } catch (Exception exception) {
+            throw new BaseException(FAILED_TO_SAVE_USERINFO);
+        }
+
+
+        return new PatchUserInfoRes(userIdx,userName,introduce,profileImageUrl,backgroundImageUrl,userJob,isMembers);
+    }
+
 
 }
