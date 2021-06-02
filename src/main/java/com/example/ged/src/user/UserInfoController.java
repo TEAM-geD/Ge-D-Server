@@ -118,4 +118,32 @@ public class UserInfoController {
         }
     }
 
+    /**
+     * 네이버 로그인 API
+     * [POST] /users/naver-signin
+     * @return BaseResponse<PostUserRes>
+     */
+    @ResponseBody
+    @PostMapping("/users/naver-signin")
+    public BaseResponse<PostUserRes> postNaverSignIn() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String accessToken = request.getHeader("KAKAO-ACCESS-TOKEN");
+        String deviceToken = request.getHeader("DEVICE-TOKEN");
+
+
+        if (accessToken == null || accessToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
+        }
+        if (deviceToken == null || deviceToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
+        }
+
+        try {
+            PostUserRes postUserRes = userInfoService.createNaverSignIn(accessToken, deviceToken);
+            return new BaseResponse<>(SUCCESS,postUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 }

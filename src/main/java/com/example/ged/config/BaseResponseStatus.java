@@ -20,7 +20,7 @@ public enum BaseResponseStatus {
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
-    NOT_FOUND_USER(false,3002,"존재자하지 않는 회원입니다."),
+    NOT_FOUND_USER(false,3002,"존재하지 않는 회원입니다."),
 
 
 
@@ -40,6 +40,8 @@ public enum BaseResponseStatus {
     FAILED_TO_KAKAO_SIGN_UP(false, 5006, "카카오 회원가입에 실패하였습니다."),
     FAILED_TO_NAVER_SIGN_UP(false, 5007, "네이버 회원가입에 실패하였습니다."),
     FAILED_TO_KAKAO_SIGN_IN(false, 5008, "카카오 로그인에 실패하였습니다."),
+    FAILED_TO_NAVER_SIGN_IN(false, 5009, "네이버 로그인에 실패하였습니다."),
+    EXIST_USER(false, 5010, "존재하는 회원입니다. 로그인을 시도하세요"),
     ;
 
 
