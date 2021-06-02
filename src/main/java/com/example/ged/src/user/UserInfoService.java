@@ -134,7 +134,7 @@ public class UserInfoService {
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
         }
         else{
@@ -265,7 +265,7 @@ public class UserInfoService {
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
         }
         else{
@@ -394,7 +394,7 @@ public class UserInfoService {
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
             String jwt = jwtService.createJwt(userInfo.getUserIdx());
             Integer useridx = userInfo.getUserIdx();
@@ -513,7 +513,7 @@ public class UserInfoService {
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
-                throw new BaseException(DATABASE_ERROR);
+                throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
             String jwt = jwtService.createJwt(userInfo.getUserIdx());
             Integer useridx = userInfo.getUserIdx();
@@ -523,18 +523,18 @@ public class UserInfoService {
 
 
     /**
-     * 회원 탈퇴 API
+     * 유저 탈퇴 API
      * @throws BaseException
      */
-    public void updateUserStatus(Integer userIdx) throws BaseException {
+    public void updateUserStatus(Integer jwtUserIdx) throws BaseException {
 
-        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(jwtUserIdx);
 
         userInfo.setStatus("INACTIVE");
         try {
             userInfo = userInfoRepository.save(userInfo);
         } catch (Exception ignored) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_SAVE_USERINFO);
         }
     }
 
@@ -567,7 +567,7 @@ public class UserInfoService {
         try {
             userInfo = userInfoRepository.save(userInfo);
         } catch (Exception exception) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_SAVE_USERINFO);
         }
 
 

@@ -25,6 +25,9 @@ public enum BaseResponseStatus {
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
     NOT_FOUND_USER(false,3002,"존재하지 않는 회원입니다."),
+    FAILED_TO_SAVE_USERINFO(false,3003,"UserInfo를 저장할 수 없습니다."),
+    FAILED_TO_FIND_BY_USERIDX_AND_STATUS(false,3004,"userIdx와 status로 UserInfo 조회에 실패했습니다."),
+    FAILED_TO_FIND_BY_SOCIALID_AND_STATUS(false,3005,"socialId와 status로 UserInfo 조회에 실패했습니다."),
 
 
 

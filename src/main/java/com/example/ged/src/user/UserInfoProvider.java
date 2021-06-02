@@ -26,7 +26,7 @@ public class UserInfoProvider {
         try {
             existsUserInfoList = userInfoRepository.findBySocialIdAndStatus(socialId, "ACTIVE");
         } catch (Exception ignored) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_FIND_BY_SOCIALID_AND_STATUS);
         }
 
         // 2. 존재하는 UserInfo가 있는지 확인
@@ -51,7 +51,7 @@ public class UserInfoProvider {
         // 1. DB에서 User 조회
         UserInfo userInfo;
         try {
-            userInfo = userInfoRepository.findById(userIdx).orElse(null);
+            userInfo = userInfoRepository.findById(userIdx).orElse(null); // 수정?
         } catch (Exception ignored) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -76,7 +76,7 @@ public class UserInfoProvider {
         try {
             userInfo = userInfoRepository.findByUserIdxAndStatus(userIdx,"ACTIVE");
         } catch (Exception ignored) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_FIND_BY_USERIDX_AND_STATUS);
         }
         String userName = userInfo.getUserName();
         String introduce = userInfo.getIntroduce();

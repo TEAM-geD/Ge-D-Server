@@ -176,15 +176,15 @@ public class UserInfoController {
     public BaseResponse<Void> patchUserStatus() {
 
 
-        Integer userIdx;
+        Integer jwtUserIdx;
         try {
-            userIdx = jwtService.getUserIdx();
+            jwtUserIdx = jwtService.getUserIdx();
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
 
         try {
-            userInfoService.updateUserStatus(userIdx);
+            userInfoService.updateUserStatus(jwtUserIdx);
             return new BaseResponse<>(SUCCESS);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
@@ -248,13 +248,13 @@ public class UserInfoController {
         if (patchUserInfoReq.getUserJob() == null || patchUserInfoReq.getUserJob().length() == 0) {
             return new BaseResponse<>(EMPTY_USER_JOB);
         }
-        if (patchUserInfoReq.getUserJob() != "기획자"||patchUserInfoReq.getUserJob() != "개발자"||patchUserInfoReq.getUserJob() != "디자이너") {
+        if (patchUserInfoReq.getUserJob() != "기획자"|| patchUserInfoReq.getUserJob() != "개발자"|| patchUserInfoReq.getUserJob() != "디자이너") {
             return new BaseResponse<>(INVALID_USER_JOB);
         }
         if (patchUserInfoReq.getIsMembers() == null || patchUserInfoReq.getIsMembers().length() == 0) {
             return new BaseResponse<>(EMPTY_IS_MEMBERS);
         }
-        if (patchUserInfoReq.getIsMembers() != "Y"||patchUserInfoReq.getIsMembers() != "N") {
+        if (patchUserInfoReq.getIsMembers() != "Y"|| patchUserInfoReq.getIsMembers() != "N") {
             return new BaseResponse<>(INVALID_IS_MEMBERS);
         }
 
