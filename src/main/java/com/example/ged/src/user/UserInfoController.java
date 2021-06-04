@@ -243,11 +243,19 @@ public class UserInfoController {
             return new BaseResponse<>(exception.getStatus());
         }
 
-
-        if (job != "기획자"|| job != "개발자"|| job != "디자이너") {
-            return new BaseResponse<>(INVALID_USER_JOB);
+        if (job== null || job.length() == 0) {
+            return new BaseResponse<>(EMPTY_USER_JOB);
         }
 
+        ArrayList<String> userJobList = new ArrayList<String>();
+
+        userJobList.add("기획자");
+        userJobList.add("개발자");
+        userJobList.add("디자이너");
+
+        if (!userJobList.contains(job)) {
+            return new BaseResponse<>(INVALID_USER_JOB);
+        }
 
         try {
             List<GetMembersRes> getMembersResList = userInfoProvider.retrieveMembers(job);
