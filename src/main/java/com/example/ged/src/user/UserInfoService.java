@@ -27,12 +27,12 @@ public class UserInfoService {
     private final JwtService jwtService;
 
     /**
-     * 카카오 회원가입
-     * @param accessToken,deviceToken,postSignUpReq
-     * @return PostUserRes
+     * 카카오 로그인 API
+     * @param accessToken,deviceToken
+     * @return PostUserSignInRes
      * @throws BaseException
      */
-    public PostUserRes createKakaoSignUp(String accessToken, String deviceToken, PostSignUpReq postSignUpReq) throws BaseException {
+    public PostUserSignInRes createKakaoSignIn(String accessToken, String deviceToken) throws BaseException {
         JSONObject jsonObject;
 
         String header = "Bearer " + accessToken; // Bearer 다음에 공백 추가
@@ -123,41 +123,42 @@ public class UserInfoService {
             throw new BaseException(FAILED_TO_PARSE);
         }
 
-        UserInfo userInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
 
-        String userJob = postSignUpReq.getUserJob();
+        UserInfo existUserInfo = null;
+        existUserInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
 
-        // 이미 존재하는 회원이 없다면 유저 정보 저장
-        if (userInfo == null) {
-            userInfo = new UserInfo(userName, null, profilePhoto, deviceToken, userJob, null,null,socialId);
+        // 1-1. 존재하는 회원이 없다면 회원가입
+        if (existUserInfo == null) {
+            UserInfo userInfo = new UserInfo(userName, null, null, deviceToken, null, null,null,socialId,email);
 
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
                 throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
-        }
-        else{
-            throw new BaseException(EXIST_USER);
-        }
 
-        // JWT 생성
-        try {
-            Integer userIdx = userInfo.getUserIdx();
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostUserRes(userIdx, jwt);
-        }catch(Exception e){
-            throw new BaseException(FAILED_TO_KAKAO_SIGN_UP);
+            String jwt = jwtService.createJwt(userInfo.getUserIdx());
+
+            Integer useridx = userInfo.getUserIdx();
+            return new PostUserSignInRes(useridx, jwt);
+
+        }
+        // 1-2. 존재하는 회원이 있다면 로그인
+        else {
+            String jwt = jwtService.createJwt(existUserInfo.getUserIdx());
+
+            Integer useridx = existUserInfo.getUserIdx();
+            return new PostUserSignInRes(useridx, jwt);
         }
     }
 
     /**
-     * 네이버 회원가입
-     * @param accessToken,deviceToken,postSignUpReq
-     * @return PostUserRes
+     * 네이버 로그인 API
+     * @param accessToken,deviceToken
+     * @return PostUserSignInRes
      * @throws BaseException
      */
-    public PostUserRes createNaverSignUp(String accessToken, String deviceToken, PostSignUpReq postSignUpReq) throws BaseException {
+    public PostUserSignInRes createNaverSignIn(String accessToken, String deviceToken) throws BaseException {
         JSONObject jsonObject;
         String resultcode;
 
@@ -254,271 +255,34 @@ public class UserInfoService {
         catch (Exception e){
             throw new BaseException(FAILED_TO_PARSE);
         }
-        UserInfo userInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
+        UserInfo existUserInfo = null;
+        existUserInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
 
-        String userJob = postSignUpReq.getUserJob();
-
-        // 이미 존재하는 회원이 없다면 유저 정보 저장
-        if (userInfo == null) {
-            userInfo = new UserInfo(userName, null, profilePhoto, deviceToken, userJob, null,null,socialId);
+        // 1-1. 존재하는 회원이 없다면 회원가입
+        if (existUserInfo == null) {
+            UserInfo userInfo = new UserInfo(userName, null, null, deviceToken, null, null,null,socialId,email);
 
             try {
                 userInfo = userInfoRepository.save(userInfo);
             } catch (Exception exception) {
                 throw new BaseException(FAILED_TO_SAVE_USERINFO);
             }
-        }
-        else{
-            throw new BaseException(EXIST_USER);
-        }
 
-        // JWT 생성
-        try {
-            Integer userIdx = userInfo.getUserIdx();
-            String jwt = jwtService.createJwt(userIdx);
-            return new PostUserRes(userIdx, jwt);
-        }catch(Exception e){
-            throw new BaseException(FAILED_TO_NAVER_SIGN_UP);
-        }
-
-    }
-
-
-    /**
-     * 카카오 로그인
-     * @param accessToken,deviceToken
-     * @return PostUserRes
-     * @throws BaseException
-     */
-    public PostUserRes createKakaoSignIn(String accessToken, String deviceToken) throws BaseException {
-        JSONObject jsonObject;
-
-        String header = "Bearer " + accessToken; // Bearer 다음에 공백 추가
-        String apiURL = "https://kapi.kakao.com/v2/user/me";
-
-        Map<String, String> requestHeaders = new HashMap<>();
-        requestHeaders.put("Authorization", header);
-
-        HttpURLConnection con;
-        try {
-            URL url = new URL(apiURL);
-            con = (HttpURLConnection) url.openConnection();
-        } catch (MalformedURLException e) {
-            throw new BaseException(WRONG_URL);
-        } catch (IOException e) {
-            throw new BaseException(FAILED_TO_CONNECT);
-        }
-
-        String body;
-        try {
-            con.setRequestMethod("GET");
-            for (Map.Entry<String, String> rqheader : requestHeaders.entrySet()) {
-                con.setRequestProperty(rqheader.getKey(), rqheader.getValue());
-            }
-
-            int responseCode = con.getResponseCode();
-            InputStreamReader streamReader;
-            if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-                streamReader = new InputStreamReader(con.getInputStream());
-            } else { // 에러 발생
-                streamReader = new InputStreamReader(con.getErrorStream());
-            }
-
-            BufferedReader lineReader = new BufferedReader(streamReader);
-            StringBuilder responseBody = new StringBuilder();
-
-            String line;
-            while ((line = lineReader.readLine()) != null) {
-                responseBody.append(line);
-            }
-
-            body = responseBody.toString();
-        } catch (IOException e) {
-            throw new BaseException(FAILED_TO_READ_RESPONSE);
-        } finally {
-            con.disconnect();
-        }
-
-        if (body.length() == 0) {
-            throw new BaseException(FAILED_TO_READ_RESPONSE);
-        }
-        System.out.println(body);
-
-        String socialId;
-        String response;
-        try{
-            JSONParser jsonParser = new JSONParser();
-            jsonObject = (JSONObject) jsonParser.parse(body);
-            socialId = "kakao_"+jsonObject.get("id").toString();
-            response = jsonObject.get("kakao_account").toString();
-        }
-        catch (Exception e){
-            throw new BaseException(FAILED_TO_PARSE);
-        }
-
-        String profilePhoto=null;
-        String userName=null;
-        String email=null;
-        String phoneNumber=null;
-        try {
-            JSONParser jsonParser = new JSONParser();
-            JSONObject responObj = (JSONObject) jsonParser.parse(response);
-            if(responObj.get("email")!=null) {
-                email = responObj.get("email").toString();
-            }
-
-            String profile = responObj.get("profile").toString();
-            JSONObject profileObj = (JSONObject) jsonParser.parse(profile);
-            userName = profileObj.get("nickname").toString();
-
-            /*
-            if(profileObj.get("profile_image")!=null) {
-                profilePhoto = profileObj.get("profile_image").toString();
-            }*/
-
-        }
-        catch (Exception e){
-            throw new BaseException(FAILED_TO_PARSE);
-        }
-
-        UserInfo userInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
-
-
-        // 이미 존재하는 회원이 없다면 카카오 로그인 실패
-        if (userInfo == null) {
-            throw new BaseException(FAILED_TO_KAKAO_SIGN_IN);
-
-        }
-        else{
-            userInfo.setDeviceToken(deviceToken);
-            try {
-                userInfo = userInfoRepository.save(userInfo);
-            } catch (Exception exception) {
-                throw new BaseException(FAILED_TO_SAVE_USERINFO);
-            }
             String jwt = jwtService.createJwt(userInfo.getUserIdx());
+
             Integer useridx = userInfo.getUserIdx();
-            return new PostUserRes(useridx, jwt);
-        }
-    }
-
-
-    /**
-     * 네이버 로그인
-     * @param accessToken,deviceToken
-     * @return PostUserRes
-     * @throws BaseException
-     */
-    public PostUserRes createNaverSignIn(String accessToken, String deviceToken) throws BaseException {
-        JSONObject jsonObject;
-
-        String header = "Bearer " + accessToken; // Bearer 다음에 공백 추가
-        String apiURL = "https://kapi.kakao.com/v2/user/me";
-
-        Map<String, String> requestHeaders = new HashMap<>();
-        requestHeaders.put("Authorization", header);
-
-        HttpURLConnection con;
-        try {
-            URL url = new URL(apiURL);
-            con = (HttpURLConnection) url.openConnection();
-        } catch (MalformedURLException e) {
-            throw new BaseException(WRONG_URL);
-        } catch (IOException e) {
-            throw new BaseException(FAILED_TO_CONNECT);
-        }
-
-        String body;
-        try {
-            con.setRequestMethod("GET");
-            for (Map.Entry<String, String> rqheader : requestHeaders.entrySet()) {
-                con.setRequestProperty(rqheader.getKey(), rqheader.getValue());
-            }
-
-            int responseCode = con.getResponseCode();
-            InputStreamReader streamReader;
-            if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
-                streamReader = new InputStreamReader(con.getInputStream());
-            } else { // 에러 발생
-                streamReader = new InputStreamReader(con.getErrorStream());
-            }
-
-            BufferedReader lineReader = new BufferedReader(streamReader);
-            StringBuilder responseBody = new StringBuilder();
-
-            String line;
-            while ((line = lineReader.readLine()) != null) {
-                responseBody.append(line);
-            }
-
-            body = responseBody.toString();
-        } catch (IOException e) {
-            throw new BaseException(FAILED_TO_READ_RESPONSE);
-        } finally {
-            con.disconnect();
-        }
-
-        if (body.length() == 0) {
-            throw new BaseException(FAILED_TO_READ_RESPONSE);
-        }
-        System.out.println(body);
-
-        String socialId;
-        String response;
-        try{
-            JSONParser jsonParser = new JSONParser();
-            jsonObject = (JSONObject) jsonParser.parse(body);
-            socialId = "kakao_"+jsonObject.get("id").toString();
-            response = jsonObject.get("kakao_account").toString();
-        }
-        catch (Exception e){
-            throw new BaseException(FAILED_TO_PARSE);
-        }
-
-        String profilePhoto=null;
-        String userName=null;
-        String email=null;
-        String phoneNumber=null;
-        try {
-            JSONParser jsonParser = new JSONParser();
-            JSONObject responObj = (JSONObject) jsonParser.parse(response);
-            if(responObj.get("email")!=null) {
-                email = responObj.get("email").toString();
-            }
-
-            String profile = responObj.get("profile").toString();
-            JSONObject profileObj = (JSONObject) jsonParser.parse(profile);
-            userName = profileObj.get("nickname").toString();
-
-            /*
-            if(profileObj.get("profile_image")!=null) {
-                profilePhoto = profileObj.get("profile_image").toString();
-            }*/
+            return new PostUserSignInRes(useridx, jwt);
 
         }
-        catch (Exception e){
-            throw new BaseException(FAILED_TO_PARSE);
-        }
-
-        UserInfo userInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
-
-
-        // 이미 존재하는 회원이 없다면 네이버 로그인 실패
-        if (userInfo == null) {
-            throw new BaseException(FAILED_TO_NAVER_SIGN_IN);
-
-        }
+        // 1-2. 존재하는 회원이 있다면 로그인
         else{
-            userInfo.setDeviceToken(deviceToken);
-            try {
-                userInfo = userInfoRepository.save(userInfo);
-            } catch (Exception exception) {
-                throw new BaseException(FAILED_TO_SAVE_USERINFO);
-            }
-            String jwt = jwtService.createJwt(userInfo.getUserIdx());
-            Integer useridx = userInfo.getUserIdx();
-            return new PostUserRes(useridx, jwt);
+            String jwt = jwtService.createJwt(existUserInfo.getUserIdx());
+
+            Integer useridx = existUserInfo.getUserIdx();
+            return new PostUserSignInRes(useridx, jwt);
         }
+
+
     }
 
 

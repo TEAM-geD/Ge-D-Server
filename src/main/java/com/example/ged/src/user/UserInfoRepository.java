@@ -8,8 +8,11 @@ import java.util.List;
 
 @Repository
 public interface UserInfoRepository extends CrudRepository<UserInfo,Integer> {
-    List<UserInfo> findBySocialIdAndStatus(String socialId, String active);
+    UserInfo findBySocialIdAndStatus(String socialId, String active);
     UserInfo findByUserIdxAndStatus(Integer userIdx, String active);
     List<UserInfo> findByUserJobAndIsMembersAndStatus(String job, String isMembers, String active);
 
+    UserInfo findBySocialId(String socialId);
+
+    UserInfo findByUserIdx(Integer idx);
 }
