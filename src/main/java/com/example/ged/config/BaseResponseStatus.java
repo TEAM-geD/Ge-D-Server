@@ -31,7 +31,7 @@ public enum BaseResponseStatus {
     FAILED_TO_SAVE_USERINFO(false,3003,"UserInfo를 저장할 수 없습니다."),
     FAILED_TO_FIND_BY_USERIDX_AND_STATUS(false,3004,"userIdx와 status로 UserInfo 조회에 실패했습니다."),
     FAILED_TO_FIND_BY_SOCIALID_AND_STATUS(false,3005,"socialId와 status로 UserInfo 조회에 실패했습니다."),
-
+    FAILED_TO_FIND_BY_USERJOB_AND_ISMEMBERS_AND_STATUS(false, 3006, "직군,멤버스여부, 상태로 UserInfo 조회에 실패했습니다."),
 
 
 
@@ -53,6 +53,7 @@ public enum BaseResponseStatus {
     FAILED_TO_NAVER_SIGN_IN(false, 5009, "네이버 로그인에 실패하였습니다."),
     EXIST_USER(false, 5010, "존재하는 회원입니다. 로그인을 시도하세요"),
     FORBIDDEN_USER(false, 5011, "해당 회원에 접근할 수 없습니다."),
+
     ;
 
 

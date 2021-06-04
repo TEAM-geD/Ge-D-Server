@@ -90,8 +90,13 @@ public class UserInfoProvider {
      * @throws BaseException
      */
     public List<GetMembersRes> retrieveMembers(String job) throws BaseException {
-        List<UserInfo> userInfoList = userInfoRepository.findByUserJobAndIsMembersAndStatus(job,"Y","ACTIVE");
+        List<UserInfo> userInfoList ;
 
+        try {
+            userInfoList = userInfoRepository.findByUserJobAndIsMembersAndStatus(job,"Y","ACTIVE");
+        } catch (Exception ignored) {
+            throw new BaseException(FAILED_TO_FIND_BY_USERJOB_AND_ISMEMBERS_AND_STATUS);
+        }
         List<GetMembersRes> getMembersResList = new ArrayList<>();
         for(int i = 0 ; i < userInfoList.size() ; i++){
             Integer userIdx = userInfoList.get(i).getUserIdx();
