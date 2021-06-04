@@ -11,6 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.ged.config.BaseResponseStatus.*;
@@ -175,19 +176,45 @@ public class UserInfoController {
         if (patchUserInfoReq.getUserName() == null || patchUserInfoReq.getUserName().length() == 0 ) {
             return new BaseResponse<>(EMPTY_USER_NAME);
         }
+
+        if (patchUserInfoReq.getIntroduce() == null || patchUserInfoReq.getIntroduce().length() == 0 ) {
+            return new BaseResponse<>(EMPTY_INTRODUCE);
+        }
+
         if (patchUserInfoReq.getIntroduce() != null && patchUserInfoReq.getIntroduce().length() > 40 ) {
             return new BaseResponse<>(INVALID_INTRODUCE_LENGTH);
         }
+
+        if (patchUserInfoReq.getProfileImageUrl() == null || patchUserInfoReq.getProfileImageUrl().length() == 0 ) {
+            return new BaseResponse<>(EMPTY_PROFILE_IMAGE_URL);
+        }
+
+        if (patchUserInfoReq.getBackgroundImageUrl() == null || patchUserInfoReq.getBackgroundImageUrl().length() == 0 ) {
+            return new BaseResponse<>(EMPTY_BACKGROUND_IMAGE_URL);
+        }
+
         if (patchUserInfoReq.getUserJob() == null || patchUserInfoReq.getUserJob().length() == 0) {
             return new BaseResponse<>(EMPTY_USER_JOB);
         }
-        if (patchUserInfoReq.getUserJob() != "기획자"|| patchUserInfoReq.getUserJob() != "개발자"|| patchUserInfoReq.getUserJob() != "디자이너") {
+
+        ArrayList<String> userJobList = new ArrayList<String>();
+
+        userJobList.add("기획자");
+        userJobList.add("개발자");
+        userJobList.add("디자이너");
+
+        if (!userJobList.contains(patchUserInfoReq.getUserJob())) {
             return new BaseResponse<>(INVALID_USER_JOB);
         }
         if (patchUserInfoReq.getIsMembers() == null || patchUserInfoReq.getIsMembers().length() == 0) {
             return new BaseResponse<>(EMPTY_IS_MEMBERS);
         }
-        if (patchUserInfoReq.getIsMembers() != "Y"|| patchUserInfoReq.getIsMembers() != "N") {
+        ArrayList<String> isMembersList = new ArrayList<String>();
+
+        isMembersList.add("Y");
+        isMembersList.add("N");
+
+        if (!isMembersList.contains(patchUserInfoReq.getIsMembers())) {
             return new BaseResponse<>(INVALID_IS_MEMBERS);
         }
 
