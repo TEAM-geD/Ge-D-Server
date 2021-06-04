@@ -1,16 +1,18 @@
 package com.example.ged.src.user.models;
 
 import com.example.ged.config.BaseEntity;
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-
+@NoArgsConstructor(access = AccessLevel.PUBLIC) // Unit Test 를 위해 PUBLIC
 @EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
-@Table(name="UserInfo")
+@Table(name="User")
 public class UserInfo extends BaseEntity {
     @Id
     @Column(name="userIdx",nullable = false,updatable = false)
@@ -26,13 +28,13 @@ public class UserInfo extends BaseEntity {
     @Column(name="profileImageUrl",columnDefinition = "TEXT")
     private String profileImageUrl;
 
-    @Column(name="deviceToken",columnDefinition = "TEXT")
+    @Column(name="deviceToken",nullable = false,columnDefinition = "TEXT")
     private String deviceToken;
 
-    @Column(name="userJob",nullable = false, length = 4)
+    @Column(name="userJob", length = 4)
     private String userJob;
 
-    @Column(name="isMembers",nullable = false, length = 1)
+    @Column(name="isMembers", length = 1)
     private String isMembers;
 
     @Column(name="backgroundImageUrl",columnDefinition = "TEXT")
@@ -41,10 +43,13 @@ public class UserInfo extends BaseEntity {
     @Column(name="socialId",nullable = false, length = 100)
     private String socialId;
 
+    @Column(name="email",nullable = false, length = 100)
+    private String email;
+
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
 
-    public UserInfo(String userName, String introduce, String profileImageUrl, String deviceToken, String userJob, String isMembers, String backgroundImageUrl, String socialId){
+    public UserInfo(String userName, String introduce, String profileImageUrl, String deviceToken, String userJob, String isMembers, String backgroundImageUrl, String socialId, String email){
         this.userName = userName;
         this.introduce = introduce;
         this.profileImageUrl = profileImageUrl;
@@ -53,6 +58,7 @@ public class UserInfo extends BaseEntity {
         this.isMembers = isMembers;
         this.backgroundImageUrl = backgroundImageUrl;
         this.socialId = socialId;
+        this.email = email;
     }
 
 }

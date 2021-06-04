@@ -23,24 +23,16 @@ public class UserInfoProvider {
      * @throws BaseException
      */
     public UserInfo retrieveUserInfoBySocialId(String socialId) throws BaseException {
-        // 1. socialId 이용해서 UserInfo DB 접근
-        List<UserInfo> existsUserInfoList;
+
+        UserInfo existsUserInfo =null;
         try {
-            existsUserInfoList = userInfoRepository.findBySocialIdAndStatus(socialId, "ACTIVE");
+            existsUserInfo = userInfoRepository.findBySocialIdAndStatus(socialId, "ACTIVE");
+
         } catch (Exception ignored) {
             throw new BaseException(FAILED_TO_FIND_BY_SOCIALID_AND_STATUS);
         }
 
-        // 2. 존재하는 UserInfo가 있는지 확인
-        UserInfo userInfo;
-        if (existsUserInfoList != null && existsUserInfoList.size() > 0) {
-            userInfo = existsUserInfoList.get(0);
-        } else {
-            userInfo = null;
-        }
-
-        // 3. UserInfo를 return
-        return userInfo;
+        return existsUserInfo;
     }
 
     /**

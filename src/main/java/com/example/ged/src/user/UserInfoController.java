@@ -23,15 +23,15 @@ public class UserInfoController {
     private final JwtService jwtService;
     private final UserInfoProvider userInfoProvider;
 
+
     /**
-     * 카카오 회원가입 API
-     * [POST] /users/kakao-signup
-     * @RequestBody parameters
-     * @return BaseResponse<PostUserRes>
+     * 카카오 로그인 API
+     * [POST] /users/kakao-signin
+     * @return BaseResponse<PostUserSignInRes>
      */
     @ResponseBody
-    @PostMapping("/users/kakao-signup")
-    public BaseResponse<PostUserRes> postKakaoSignUp(@RequestBody PostSignUpReq parameters) {
+    @PostMapping("/users/kakao-signin")
+    public BaseResponse<PostUserSignInRes> postKakaoSignIn() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String accessToken = request.getHeader("KAKAO-ACCESS-TOKEN");
         String deviceToken = request.getHeader("DEVICE-TOKEN");
@@ -44,30 +44,23 @@ public class UserInfoController {
             return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
         }
 
-        if (parameters.getUserJob() == null || parameters.getUserJob().length() == 0) {
-            return new BaseResponse<>(EMPTY_USER_JOB);
-        }
-        if (parameters.getUserJob() != "기획자"||parameters.getUserJob() != "개발자"||parameters.getUserJob() != "디자이너") {
-            return new BaseResponse<>(INVALID_USER_JOB);
-        }
 
         try {
-            PostUserRes postUserRes = userInfoService.createKakaoSignUp(accessToken, deviceToken, parameters);
-            return new BaseResponse<>(SUCCESS,postUserRes);
+            PostUserSignInRes postUserSignInRes = userInfoService.createKakaoSignIn(accessToken, deviceToken);
+            return new BaseResponse<>(SUCCESS, postUserSignInRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
     }
 
     /**
-     * 네이버 회원가입 API
-     * [POST] /users/naver-signup
-     * @RequestBody postSignUpReq
-     * @return BaseResponse<PostUserRes>
+     * 네이버 로그인 API
+     * [POST] /users/naver-signin
+     * @return BaseResponse<PostUserSignInRes>
      */
     @ResponseBody
-    @PostMapping("/users/naver-signup")
-    public BaseResponse<PostUserRes> postNaverSignUp(@RequestBody PostSignUpReq postSignUpReq) {
+    @PostMapping("/users/naver-signin")
+    public BaseResponse<PostUserSignInRes> postNaverSignIn() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String accessToken = request.getHeader("NAVER-ACCESS-TOKEN");
         String deviceToken = request.getHeader("DEVICE-TOKEN");
@@ -80,77 +73,15 @@ public class UserInfoController {
             return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
         }
 
-        if (postSignUpReq.getUserJob() == null || postSignUpReq.getUserJob().length() == 0) {
-            return new BaseResponse<>(EMPTY_USER_JOB);
-        }
-
-        if (postSignUpReq.getUserJob() != "기획자"|| postSignUpReq.getUserJob() != "개발자"|| postSignUpReq.getUserJob() != "디자이너") {
-            return new BaseResponse<>(INVALID_USER_JOB);
-        }
 
         try {
-            PostUserRes postUserRes = userInfoService.createNaverSignUp(accessToken, deviceToken, postSignUpReq);
-            return new BaseResponse<>(SUCCESS,postUserRes);
+            PostUserSignInRes postUserSignInRes = userInfoService.createNaverSignIn(accessToken, deviceToken);
+            return new BaseResponse<>(SUCCESS, postUserSignInRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
     }
 
-    /**
-     * 카카오 로그인 API
-     * [POST] /users/kakao-signin
-     * @return BaseResponse<PostUserRes>
-     */
-    @ResponseBody
-    @PostMapping("/users/kakao-signin")
-    public BaseResponse<PostUserRes> postKakaoSignIn() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String accessToken = request.getHeader("KAKAO-ACCESS-TOKEN");
-        String deviceToken = request.getHeader("DEVICE-TOKEN");
-
-
-        if (accessToken == null || accessToken.length() == 0) {
-            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
-        }
-        if (deviceToken == null || deviceToken.length() == 0) {
-            return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
-        }
-
-        try {
-            PostUserRes postUserRes = userInfoService.createKakaoSignIn(accessToken, deviceToken);
-            return new BaseResponse<>(SUCCESS,postUserRes);
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
-    }
-
-    /**
-     * 네이버 로그인 API
-     * [POST] /users/naver-signin
-     * @return BaseResponse<PostUserRes>
-     */
-    @ResponseBody
-    @PostMapping("/users/naver-signin")
-    public BaseResponse<PostUserRes> postNaverSignIn() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String accessToken = request.getHeader("KAKAO-ACCESS-TOKEN");
-        String deviceToken = request.getHeader("DEVICE-TOKEN");
-
-
-        if (accessToken == null || accessToken.length() == 0) {
-            return new BaseResponse<>(EMPTY_ACCESS_TOKEN);
-        }
-        if (deviceToken == null || deviceToken.length() == 0) {
-            return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
-        }
-
-        try {
-            PostUserRes postUserRes = userInfoService.createNaverSignIn(accessToken, deviceToken);
-            return new BaseResponse<>(SUCCESS,postUserRes);
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
-    }
 
     /**
      * 자동 로그인 API
