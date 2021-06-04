@@ -142,7 +142,7 @@ public class UserInfoController {
 
 
         if(userIdx != jwtUserIdx){
-            throw new BaseException(FORBIDDEN_USER);
+            return new BaseResponse<>(FORBIDDEN_USER);
         }
 
 
