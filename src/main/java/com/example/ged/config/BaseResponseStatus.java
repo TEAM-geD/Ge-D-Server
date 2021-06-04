@@ -21,6 +21,9 @@ public enum BaseResponseStatus {
     INVALID_INTRODUCE_LENGTH(false,2007,"소개글은 40자 이하여야 합니다."),
     EMPTY_IS_MEMBERS(false,2008,"멤버스 여부를 입력하세요."),
     INVALID_IS_MEMBERS(false,2009,"멤버스 여부는 [Y, N] 중에 입력하세요."),
+    EMPTY_INTRODUCE(false,2010,"소개글을 입력하세요."),
+    EMPTY_PROFILE_IMAGE_URL(false,2011,"프로필 이미지를 입력하세요."),
+    EMPTY_BACKGROUND_IMAGE_URL(false,2012,"배경 이미지를 입력하세요."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
