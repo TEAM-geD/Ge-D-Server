@@ -27,7 +27,7 @@ public enum BaseResponseStatus {
     EMPTY_TYPE(false,2013,"타입을 입력하세요."),
     INVALID_TYPE(false,2014,"유효하지않은 타입입니다. [1,2,3,4] 중에 입력하세요."),
     INVALID_REFERENCEIDX(false,2015,"유효하지 않은 referenceIdx입니다."),
-
+    EMPTY_REFERENCEIDX(false,2016,"referenceIdx를 입력하세요."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
@@ -41,6 +41,10 @@ public enum BaseResponseStatus {
     FAILED_TO_FIND_BY_REFERENCE_CATEGORY_AND_STATUS(false, 3009, "referenceCategory와 status로 Reference 조회에 실패했습니다."),
     FAILED_TO_FIND_BY_REFERENCEIDX_AND_STATUS(false, 3010, "referenceIdx와 status로 Reference 조회에 실패했습니다."),
     FAILED_TO_EXIST_BY_REFERENCEIDX_AND_STATUS(false, 3011, "referenceIdx와 status로 Reference 존재 여부 확인에 실패했습니다."),
+    NOT_FOUND_REFERENCE(false, 3012, "레퍼런스를 찾을 수 없습니다."),
+    FAILED_TO_EXIST_BY_USERINFO_AND_REFERENCE_AND_STATUS(false, 3013, "userInfo,reference,status로 ReferenceHeart 존재 여부 확인에 실패했습니다."),
+    FAILED_TO_SAVE_REFERENCE_HEART(false,3014,"ReferenceHeart를 저장할 수 없습니다."),
+    FAILED_TO_FIND_BY_USERINFO_AND_REFERENCE_AND_STATUS(false, 3015, "userInfo,reference,status로 ReferenceHeart 조회에 실패했습니다."),
 
 
     // 4000 : Database 오류

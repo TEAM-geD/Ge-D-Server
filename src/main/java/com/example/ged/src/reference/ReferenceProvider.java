@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.ged.config.BaseResponseStatus.FAILED_TO_FIND_BY_REFERENCE_CATEGORY_AND_STATUS;
-import static com.example.ged.config.BaseResponseStatus.FAILED_TO_FIND_BY_REFERENCEIDX_AND_STATUS;
-import static com.example.ged.config.BaseResponseStatus.FAILED_TO_EXIST_BY_REFERENCEIDX_AND_STATUS;
+import static com.example.ged.config.BaseResponseStatus.*;
+import static com.example.ged.config.BaseResponseStatus.NOT_FOUND_REFERENCE_CATEGORY;
+
 @Service
 @RequiredArgsConstructor
 public class ReferenceProvider {
@@ -95,7 +95,28 @@ public class ReferenceProvider {
         return existReference;
     }
 
+    /**
+     * Idx로 레퍼런스 조회
+     *
+     * @param referenceIdx
+     * @return Reference
+     * @throws BaseException
+     */
+    public Reference retrieveReferenceByReferenceIdx(Integer referenceIdx) throws BaseException {
+        Reference reference;
 
+        try {
+            reference = referenceRepository.findById(referenceIdx).orElse(null);
+        } catch (Exception ignored) {
+            throw new BaseException(FAILED_TO_FIND_BY_ID);
+        }
+
+        if (reference == null || !reference.getStatus().equals("ACTIVE")) {
+            throw new BaseException(NOT_FOUND_REFERENCE);
+        }
+
+        return reference;
+    }
 
 
 

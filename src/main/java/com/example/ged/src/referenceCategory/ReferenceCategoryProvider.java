@@ -18,7 +18,7 @@ public class ReferenceCategoryProvider {
      * Idx로 레퍼런스 카테고리 조회
      *
      * @param referenceCategoryIdx
-     * @return IngredientCategory
+     * @return ReferenceCategory
      * @throws BaseException
      */
     public ReferenceCategory retrieveReferenceCategoryByReferenceCategoryIdx(Integer referenceCategoryIdx) throws BaseException {
