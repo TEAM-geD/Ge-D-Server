@@ -2,7 +2,7 @@ package com.example.ged.src.reference.models;
 
 import com.example.ged.config.BaseEntity;
 import com.example.ged.src.referenceCategory.models.ReferenceCategory;
-import com.example.ged.src.referenceLike.models.ReferenceLike;
+import com.example.ged.src.referenceHeart.models.ReferenceHeart;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,7 +47,7 @@ public class Reference extends BaseEntity {
     private String status = "ACTIVE";
 
     @OneToMany(mappedBy = "reference", cascade = CascadeType.ALL)
-    private List<ReferenceLike> referenceLikes = new ArrayList<>();
+    private List<ReferenceHeart> referenceHearts = new ArrayList<>();
 
     public Reference(String referenceName,String referenceThumbnail,String referenceAuthor,String referenceAuthorJob,String referenceUrl, ReferenceCategory referenceCategory){
         this.referenceName = referenceName;

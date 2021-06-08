@@ -8,6 +8,9 @@ import com.example.ged.src.referenceCategory.ReferenceCategoryProvider;
 import com.example.ged.src.referenceCategory.models.ReferenceCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,5 +94,10 @@ public class ReferenceProvider {
 
         return existReference;
     }
+
+
+
+
+
 
 }

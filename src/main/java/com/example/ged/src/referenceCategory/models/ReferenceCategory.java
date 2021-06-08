@@ -2,7 +2,6 @@ package com.example.ged.src.referenceCategory.models;
 
 import com.example.ged.config.BaseEntity;
 import com.example.ged.src.reference.models.Reference;
-import com.example.ged.src.referenceLike.models.ReferenceLike;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,4 +1,4 @@
-package com.example.ged.src.referenceLike.models;
+package com.example.ged.src.referenceHeart.models;
 
 import com.example.ged.config.BaseEntity;
 import com.example.ged.src.reference.models.Reference;
@@ -10,12 +10,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 @NoArgsConstructor(access = AccessLevel.PUBLIC) // Unit Test 를 위해 PUBLIC
 @EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
-@Table(name="ReferenceLike")
-public class ReferenceLike extends BaseEntity {
+@Table(name="ReferenceHeart")
+public class ReferenceHeart extends BaseEntity {
     @Id
     @Column(name="idx",nullable = false,updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +34,7 @@ public class ReferenceLike extends BaseEntity {
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
 
-    public ReferenceLike(UserInfo userInfo,Reference reference){
+    public ReferenceHeart(UserInfo userInfo,Reference reference){
         this.userInfo = userInfo;
         this.reference = reference;
     }
