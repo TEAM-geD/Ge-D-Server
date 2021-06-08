@@ -2,6 +2,7 @@ package com.example.ged.src.reference;
 
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
+import com.example.ged.src.reference.models.GetReferenceRes;
 import com.example.ged.src.reference.models.GetReferencesRes;
 import com.example.ged.utils.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +61,36 @@ public class ReferenceController {
     }
 
 
+    /**
+     * 레퍼런스 상세 조회 API
+     * [GET] /references/:referenceIdx
+     * @PathVariable referenceIdx
+     * @return BaseResponse<GetReferenceRes>
+     */
+    @ResponseBody
+    @GetMapping("/references/{referenceIdx}")
+    public BaseResponse<GetReferenceRes> getReference(@PathVariable Integer referenceIdx) throws BaseException {
+        Integer jwtUserIdx;
+        try {
+            jwtUserIdx = jwtService.getUserIdx();
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+
+
+        Boolean existReference = referenceProvider.existReference(referenceIdx);
+        if (!existReference){
+            return new BaseResponse<>(INVALID_REFERENCEIDX);
+        }
+
+
+        try {
+            GetReferenceRes getReferenceRes = referenceProvider.retrieveReference(referenceIdx);
+            return new BaseResponse<>(SUCCESS,getReferenceRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 
 

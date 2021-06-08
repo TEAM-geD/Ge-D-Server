@@ -13,5 +13,8 @@ public interface ReferenceRepository extends CrudRepository<Reference,Integer> {
 
     List<Reference> findByReferenceCategoryAndStatus(ReferenceCategory referenceCategory, String active);
 
+    Reference findByReferenceIdxAndStatus(Integer referenceIdx, String active);
+
+    Boolean existsByReferenceIdxAndStatus(Integer referenceIdx, String active);
 
 }

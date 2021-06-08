@@ -1,6 +1,7 @@
 package com.example.ged.src.reference;
 
 import com.example.ged.config.BaseException;
+import com.example.ged.src.reference.models.GetReferenceRes;
 import com.example.ged.src.reference.models.GetReferencesRes;
 import com.example.ged.src.reference.models.Reference;
 import com.example.ged.src.referenceCategory.ReferenceCategoryProvider;
@@ -12,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.ged.config.BaseResponseStatus.FAILED_TO_FIND_BY_REFERENCE_CATEGORY_AND_STATUS;
-
+import static com.example.ged.config.BaseResponseStatus.FAILED_TO_FIND_BY_REFERENCEIDX_AND_STATUS;
+import static com.example.ged.config.BaseResponseStatus.FAILED_TO_EXIST_BY_REFERENCEIDX_AND_STATUS;
 @Service
 @RequiredArgsConstructor
 public class ReferenceProvider {
@@ -51,6 +53,43 @@ public class ReferenceProvider {
     }
 
 
+    /**
+     * 레퍼런스 상세 조회 API
+     * @param referenceIdx
+     * @return GetReferenceRes
+     * @throws BaseException
+     */
+    public GetReferenceRes retrieveReference(Integer referenceIdx) throws BaseException {
+        Reference reference;
+        try {
+            reference = referenceRepository.findByReferenceIdxAndStatus(referenceIdx,"ACTIVE");
+        } catch (Exception ignored) {
+            throw new BaseException(FAILED_TO_FIND_BY_REFERENCEIDX_AND_STATUS);
+        }
 
+        String referenceUrl = reference.getReferenceUrl();
+
+        return new GetReferenceRes(referenceIdx,referenceUrl);
+    }
+
+
+
+    /**
+     * 레퍼런스 인덱스 존재여부
+     * @param referenceIdx
+     * @return Boolean
+     * @throws BaseException
+     */
+    public Boolean existReference(Integer referenceIdx) throws BaseException {
+        Boolean existReference;
+        try {
+            existReference = referenceRepository.existsByReferenceIdxAndStatus(referenceIdx,"ACTIVE");
+        } catch (Exception ignored) {
+            throw new BaseException(FAILED_TO_EXIST_BY_REFERENCEIDX_AND_STATUS);
+        }
+
+
+        return existReference;
+    }
 
 }
