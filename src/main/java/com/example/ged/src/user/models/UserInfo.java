@@ -1,12 +1,15 @@
 package com.example.ged.src.user.models;
 
 import com.example.ged.config.BaseEntity;
+import com.example.ged.src.referenceHeart.models.ReferenceHeart;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PUBLIC) // Unit Test 를 위해 PUBLIC
 @EqualsAndHashCode(callSuper = false)
@@ -48,6 +51,9 @@ public class UserInfo extends BaseEntity {
 
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
+
+    @OneToMany(mappedBy = "userInfo", cascade = CascadeType.ALL)
+    private List<ReferenceHeart> referenceHearts = new ArrayList<>();
 
     public UserInfo(String userName, String introduce, String profileImageUrl, String deviceToken, String userJob, String isMembers, String backgroundImageUrl, String socialId, String email){
         this.userName = userName;
