@@ -77,6 +77,9 @@ public class ReferenceController {
             return new BaseResponse<>(exception.getStatus());
         }
 
+        if (referenceIdx == null || referenceIdx <= 0) {
+            return new BaseResponse<>(EMPTY_REFERENCEIDX);
+        }
 
         Boolean existReference = referenceProvider.existReference(referenceIdx);
         if (!existReference){
