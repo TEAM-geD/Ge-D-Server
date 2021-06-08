@@ -1,12 +1,16 @@
 package com.example.ged.src.reference.models;
 
 import com.example.ged.config.BaseEntity;
+import com.example.ged.src.referenceCategory.models.ReferenceCategory;
+import com.example.ged.src.referenceLike.models.ReferenceLike;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @NoArgsConstructor(access = AccessLevel.PUBLIC) // Unit Test 를 위해 PUBLIC
@@ -35,19 +39,23 @@ public class Reference extends BaseEntity {
     @Column(name="referenceUrl",nullable = false,columnDefinition = "TEXT")
     private String referenceUrl;
 
-    @Column(name="referenceCategoryIdx",nullable = false)
-    private Integer referenceCategoryIdx;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "referenceCategoryIdx", nullable = false)
+    private ReferenceCategory referenceCategory;
 
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
 
-    public Reference(String referenceName,String referenceThumbnail,String referenceAuthor,String referenceAuthorJob,String referenceUrl,Integer referenceCategoryIdx){
+    @OneToMany(mappedBy = "reference", cascade = CascadeType.ALL)
+    private List<ReferenceLike> referenceLikes = new ArrayList<>();
+
+    public Reference(String referenceName,String referenceThumbnail,String referenceAuthor,String referenceAuthorJob,String referenceUrl, ReferenceCategory referenceCategory){
         this.referenceName = referenceName;
         this.referenceThumbnail = referenceThumbnail;
         this.referenceAuthor = referenceAuthor;
         this.referenceAuthorJob = referenceAuthorJob;
         this.referenceUrl = referenceUrl;
-        this.referenceCategoryIdx = referenceCategoryIdx;
+        this.referenceCategory = referenceCategory;
     }
 
 }

@@ -1,6 +1,8 @@
 package com.example.ged.src.referenceLike.models;
 
 import com.example.ged.config.BaseEntity;
+import com.example.ged.src.reference.models.Reference;
+import com.example.ged.src.user.models.UserInfo;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,18 +21,21 @@ public class ReferenceLike extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idx;
 
-    @Column(name="userIdx",nullable = false)
-    private Integer userIdx;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userIdx", nullable = false)
+    private UserInfo userInfo;
 
-    @Column(name="referenceIdx",nullable = false)
-    private Integer referenceIdx;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "referenceIdx", nullable = false)
+    private Reference reference;
+
 
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
 
-    public ReferenceLike(Integer userIdx,Integer referenceIdx){
-        this.userIdx = userIdx;
-        this.referenceIdx = referenceIdx;
+    public ReferenceLike(UserInfo userInfo,Reference reference){
+        this.userInfo = userInfo;
+        this.reference = reference;
     }
 
 }
