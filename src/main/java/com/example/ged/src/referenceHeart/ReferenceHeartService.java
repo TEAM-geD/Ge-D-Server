@@ -21,7 +21,7 @@ public class ReferenceHeartService {
     private final ReferenceProvider referenceProvider;
 
     /**
-     * 레퍼런스 좋아요 생성
+     * 레퍼런스 찜하기 생성
      * @param userIdx,referenceIdx
      * @return void
      * @throws BaseException
@@ -41,7 +41,7 @@ public class ReferenceHeartService {
     }
 
     /**
-     * 레퍼런스 좋아요 취소
+     * 레퍼런스 찜하기 취소
      * @param userIdx,referenceIdx
      * @return void
      * @throws BaseException
@@ -59,4 +59,5 @@ public class ReferenceHeartService {
             throw new BaseException(FAILED_TO_SAVE_REFERENCE_HEART);
         }
     }
+
 }
