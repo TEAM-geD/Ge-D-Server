@@ -24,7 +24,6 @@ public class UserInfoController {
     private final JwtService jwtService;
     private final UserInfoProvider userInfoProvider;
 
-
     /**
      * 카카오 로그인 API
      * [POST] /users/kakao-signin

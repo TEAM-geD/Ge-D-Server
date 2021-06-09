@@ -4,6 +4,8 @@ import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.src.reference.models.GetReferenceRes;
 import com.example.ged.src.reference.models.GetReferencesRes;
+import com.example.ged.src.referenceHeart.ReferenceHeartProvider;
+import com.example.ged.src.referenceHeart.models.GetReferencesHeartRes;
 import com.example.ged.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +18,7 @@ import static com.example.ged.config.BaseResponseStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping("/references")
 public class ReferenceController {
     private final JwtService jwtService;
     private final ReferenceProvider referenceProvider;
@@ -27,8 +29,7 @@ public class ReferenceController {
      * @RequestParam type
      * @return BaseResponse<List<GetReferencesRes>>
      */
-    @ResponseBody
-    @GetMapping("/references")
+    @GetMapping("")
     public BaseResponse<List<GetReferencesRes>> getReferences(@RequestParam Integer type) throws BaseException {
         Integer jwtUserIdx;
         try {
@@ -67,8 +68,7 @@ public class ReferenceController {
      * @PathVariable referenceIdx
      * @return BaseResponse<GetReferenceRes>
      */
-    @ResponseBody
-    @GetMapping("/references/{referenceIdx}")
+    @GetMapping("/{referenceIdx}")
     public BaseResponse<GetReferenceRes> getReference(@PathVariable Integer referenceIdx) throws BaseException {
         Integer jwtUserIdx;
         try {
@@ -95,6 +95,14 @@ public class ReferenceController {
         }
     }
 
+    /**
+     * 레퍼런스 찜한 내역 조회 API
+     * [GET] /references/heart
+     */
+    @GetMapping("/test")
+    public BaseResponse<Void> getTest()  {
+        System.out.println("test");
+        return new BaseResponse<>(SUCCESS);
 
-
+    }
 }

@@ -45,7 +45,7 @@ public enum BaseResponseStatus {
     FAILED_TO_EXIST_BY_USERINFO_AND_REFERENCE_AND_STATUS(false, 3013, "userInfo,reference,status로 ReferenceHeart 존재 여부 확인에 실패했습니다."),
     FAILED_TO_SAVE_REFERENCE_HEART(false,3014,"ReferenceHeart를 저장할 수 없습니다."),
     FAILED_TO_FIND_BY_USERINFO_AND_REFERENCE_AND_STATUS(false, 3015, "userInfo,reference,status로 ReferenceHeart 조회에 실패했습니다."),
-
+    FAILED_TO_FIND_USERINFO_AND_STATUS(false, 3016, "userInfo, status로 ReferenceHeart 조회에 실패했습니다."),
 
     // 4000 : Database 오류
     SERVER_ERROR(false, 4000, "서버와의 통신에 실패하였습니다."),
