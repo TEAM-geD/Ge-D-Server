@@ -91,9 +91,10 @@ public class ReferenceHeartProvider {
             String referenceName = referenceHeartList.get(i).getReference().getReferenceName();
             String referenceThumbnail = referenceHeartList.get(i).getReference().getReferenceThumbnail();
             String referenceAuthor = referenceHeartList.get(i).getReference().getReferenceAuthor();
+            String referenceAuthorProfileUrl = referenceHeartList.get(i).getReference().getReferenceAuthorProfileUrl();
             String referenceUrl = referenceHeartList.get(i).getReference().getReferenceUrl();
 
-            GetReferencesHeartRes getReferencesHeartRes = new GetReferencesHeartRes(referenceIdx,referenceName,referenceThumbnail,referenceAuthor,referenceUrl);
+            GetReferencesHeartRes getReferencesHeartRes = new GetReferencesHeartRes(referenceIdx,referenceName,referenceThumbnail,referenceAuthor,referenceAuthorProfileUrl,referenceUrl);
 
             getReferencesHeartResList.add(getReferencesHeartRes);
         }

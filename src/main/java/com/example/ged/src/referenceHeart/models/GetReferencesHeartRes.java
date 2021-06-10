@@ -9,5 +9,6 @@ public class GetReferencesHeartRes {
     private final String referenceName;
     private final String referenceThumbnail;
     private final String referenceAuthor;
+    private final String referenceAuthorProfileUrl;
     private final String referenceUrl;
 }

@@ -39,6 +39,9 @@ public class Reference extends BaseEntity {
     @Column(name="referenceUrl",nullable = false,columnDefinition = "TEXT")
     private String referenceUrl;
 
+    @Column(name="referenceAuthorProfileUrl",nullable = false, columnDefinition = "TEXT")
+    private String referenceAuthorProfileUrl;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "referenceCategoryIdx", nullable = false)
     private ReferenceCategory referenceCategory;
@@ -49,12 +52,13 @@ public class Reference extends BaseEntity {
     @OneToMany(mappedBy = "reference", cascade = CascadeType.ALL)
     private List<ReferenceHeart> referenceHearts = new ArrayList<>();
 
-    public Reference(String referenceName,String referenceThumbnail,String referenceAuthor,String referenceAuthorJob,String referenceUrl, ReferenceCategory referenceCategory){
+    public Reference(String referenceName,String referenceThumbnail,String referenceAuthor,String referenceAuthorJob,String referenceUrl,String referenceAuthorProfileUrl, ReferenceCategory referenceCategory){
         this.referenceName = referenceName;
         this.referenceThumbnail = referenceThumbnail;
         this.referenceAuthor = referenceAuthor;
         this.referenceAuthorJob = referenceAuthorJob;
         this.referenceUrl = referenceUrl;
+        this.referenceAuthorProfileUrl = referenceAuthorProfileUrl;
         this.referenceCategory = referenceCategory;
     }
 
