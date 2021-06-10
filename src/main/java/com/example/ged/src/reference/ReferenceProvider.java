@@ -46,9 +46,10 @@ public class ReferenceProvider {
             String referenceThumbnail = referenceList.get(i).getReferenceThumbnail();
             String referenceAuthor = referenceList.get(i).getReferenceAuthor();
             String referenceAuthorJob = referenceList.get(i).getReferenceAuthorJob();
+            String referenceAuthorProfileUrl = referenceList.get(i).getReferenceAuthorProfileUrl();
             String referenceUrl = referenceList.get(i).getReferenceUrl();
 
-            GetReferencesRes getReferencesRes = new GetReferencesRes(referenceCategoryIdx, referenceIdx, referenceThumbnail, referenceAuthor, referenceAuthorJob, referenceUrl);
+            GetReferencesRes getReferencesRes = new GetReferencesRes(referenceCategoryIdx, referenceIdx, referenceThumbnail, referenceAuthor, referenceAuthorJob,referenceAuthorProfileUrl, referenceUrl);
             getReferencesResList.add(getReferencesRes);
 
         }
