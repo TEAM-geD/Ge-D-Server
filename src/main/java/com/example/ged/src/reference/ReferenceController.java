@@ -95,14 +95,4 @@ public class ReferenceController {
         }
     }
 
-    /**
-     * 레퍼런스 찜한 내역 조회 API
-     * [GET] /references/heart
-     */
-    @GetMapping("/test")
-    public BaseResponse<Void> getTest()  {
-        System.out.println("test");
-        return new BaseResponse<>(SUCCESS);
-
-    }
 }
