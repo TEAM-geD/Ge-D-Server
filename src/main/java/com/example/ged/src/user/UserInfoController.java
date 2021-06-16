@@ -163,11 +163,11 @@ public class UserInfoController {
 
     /**
      * 유저 탈퇴 API
-     * [PATCH] /users/status
+     * [PATCH] /users/:userIdx/status
      */
     @ResponseBody
-    @PatchMapping("/users/status")
-    public BaseResponse<Void> patchUserStatus() {
+    @PatchMapping("/users/{userIdx}/status")
+    public BaseResponse<Void> patchUserStatus(@PathVariable Integer userIdx) {
 
 
         Integer jwtUserIdx;
@@ -177,8 +177,12 @@ public class UserInfoController {
             return new BaseResponse<>(exception.getStatus());
         }
 
+        if(userIdx != jwtUserIdx){
+            return new BaseResponse<>(FORBIDDEN_USER);
+        }
+
         try {
-            userInfoService.updateUserStatus(jwtUserIdx);
+            userInfoService.updateUserStatus(userIdx);
             return new BaseResponse<>(SUCCESS);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
