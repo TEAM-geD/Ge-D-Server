@@ -11,8 +11,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.nimbusds.jwt.SignedJWT;
+import com.nimbusds.jwt.ReadOnlyJWTClaimsSet;
 
 import static com.example.ged.config.BaseResponseStatus.*;
 
@@ -76,6 +80,63 @@ public class UserInfoController {
 
         try {
             PostUserSignInRes postUserSignInRes = userInfoService.createNaverSignIn(accessToken, deviceToken);
+            return new BaseResponse<>(SUCCESS, postUserSignInRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /**
+     * 애플 로그인 API
+     * [POST] /users/apple-signin
+     * @return BaseResponse<PostUserSignInRes>
+     */
+    @ResponseBody
+    @PostMapping("/users/apple-signin")
+    public BaseResponse<PostUserSignInRes> postAppleSignIn() throws BaseException, ParseException {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String idToken = request.getHeader("APPLE-ID-TOKEN");
+        String userName = request.getHeader("USER-NAME");
+        String userEmail = request.getHeader("USER-EMAIL");
+        String deviceToken = request.getHeader("DEVICE-TOKEN");
+
+
+        if (deviceToken == null || deviceToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
+        }
+
+        if (idToken == null || idToken.length() == 0) {
+            return new BaseResponse<>(EMPTY_ID_TOKEN);
+        }
+
+
+
+        // idToken 디코딩하여 sub 뽑기
+        SignedJWT signedJWT = SignedJWT.parse(idToken);
+        ReadOnlyJWTClaimsSet payload = signedJWT.getJWTClaimsSet();
+        String socialId = payload.getSubject();
+
+        // socialId db에 있는지 확인
+        UserInfo existsUserInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
+
+        try {
+            PostUserSignInRes postUserSignInRes;
+            if (existsUserInfo == null){
+                if (userName == null || userName.length() == 0) {
+                    return new BaseResponse<>(EMPTY_USER_NAME);
+                }
+                if (userEmail == null || userEmail.length() == 0) {
+                    return new BaseResponse<>(EMPTY_USER_EMAIL);
+                }
+                // 첫번째 로그인
+                postUserSignInRes = userInfoService.createAppleSignUp(socialId, userName, userEmail, deviceToken);
+
+            }
+            else{
+                // 로그인
+                postUserSignInRes = userInfoService.createAppleSignIn(existsUserInfo);
+            }
+
             return new BaseResponse<>(SUCCESS, postUserSignInRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
