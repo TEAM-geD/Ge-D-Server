@@ -2,7 +2,7 @@ package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
 import com.example.ged.src.user.models.*;
-import com.example.ged.utils.JwtService;
+import com.example.ged.utils.*;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -284,6 +284,46 @@ public class UserInfoService {
 
 
     }
+
+    /**
+     * 애플 로그인 API (첫 로그인시 디비에 저장)
+     * @param socialId, userName, userEmail, deviceToken
+     * @return PostUserSignInRes
+     * @throws BaseException
+     */
+    public PostUserSignInRes createAppleSignUp(String socialId, String userName, String userEmail, String deviceToken) throws BaseException {
+        UserInfo userInfo = new UserInfo(userName, null, null, deviceToken, null, null,null,socialId,userEmail);
+
+        try {
+            userInfo = userInfoRepository.save(userInfo);
+        } catch (Exception exception) {
+            throw new BaseException(FAILED_TO_SAVE_USERINFO);
+        }
+
+        String jwt = jwtService.createJwt(userInfo.getUserIdx());
+
+        Integer useridx = userInfo.getUserIdx();
+        return new PostUserSignInRes(useridx, jwt);
+
+    }
+
+
+    /**
+     * 애플 로그인 API
+     * @param existUserInfo
+     * @return PostUserSignInRes
+     * @throws BaseException
+     */
+    public PostUserSignInRes createAppleSignIn(UserInfo existUserInfo) throws BaseException {
+
+
+        String jwt = jwtService.createJwt(existUserInfo.getUserIdx());
+
+        Integer useridx = existUserInfo.getUserIdx();
+        return new PostUserSignInRes(useridx, jwt);
+
+    }
+
 
 
     /**

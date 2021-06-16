@@ -28,6 +28,8 @@ public enum BaseResponseStatus {
     INVALID_TYPE(false,2014,"유효하지않은 타입입니다. [1,2,3,4] 중에 입력하세요."),
     INVALID_REFERENCEIDX(false,2015,"유효하지 않은 referenceIdx입니다."),
     EMPTY_REFERENCEIDX(false,2016,"referenceIdx를 입력하세요."),
+    EMPTY_ID_TOKEN(false,2017,"ID token을 입력하세요."),
+    EMPTY_USER_EMAIL(false,2018,"email을 입력하세요."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
