@@ -4,6 +4,8 @@ import com.example.ged.config.BaseException;
 import com.example.ged.src.user.models.GetMembersRes;
 import com.example.ged.src.user.models.GetUserInfoRes;
 import com.example.ged.src.user.models.UserInfo;
+import com.example.ged.src.userSns.UserSnsRepository;
+import com.example.ged.src.userSns.models.UserSns;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ import static com.example.ged.config.BaseResponseStatus.*;
 @RequiredArgsConstructor
 public class UserInfoProvider {
     private final UserInfoRepository userInfoRepository;
-
+    private final UserSnsRepository userSnsRepository;
     /**
      * 유저조회
      * @return User
@@ -79,8 +81,22 @@ public class UserInfoProvider {
         String userJob = userInfo.getUserJob();
         String isMembers = userInfo.getIsMembers();
 
+        UserInfo user = retrieveUserByUserIdx(userIdx);
 
-        return new GetUserInfoRes(userIdx,userName,introduce,profileImageUrl,backgroundImageUrl,userJob,isMembers);
+        List<UserSns> userSnsList ;
+        try{
+            userSnsList = userSnsRepository.findByUserInfoAndStatus(user,"ACTIVE");
+        }catch (Exception ignored) {
+            throw new BaseException(FAILED_TO_FIND_BY_USERINFO_AND_STATUS);
+        }
+
+        List<String> userSnsUrlList = new ArrayList<>();
+        for(int i=0;i<userSnsList.size();i++){
+            userSnsUrlList.add(userSnsList.get(i).getSnsUrl());
+        }
+
+
+        return new GetUserInfoRes(userIdx,userName,introduce,profileImageUrl,backgroundImageUrl,userJob,isMembers,userSnsUrlList);
     }
 
     /**

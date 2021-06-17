@@ -1,7 +1,6 @@
 package com.example.ged.src.userSns.models;
 
 import com.example.ged.config.BaseEntity;
-import com.example.ged.src.referenceHeart.models.ReferenceHeart;
 import com.example.ged.src.user.models.UserInfo;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -9,8 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 
