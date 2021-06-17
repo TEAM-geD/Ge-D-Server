@@ -16,5 +16,5 @@ public class GetUserInfoRes {
     private final String backgroundImageUrl;
     private final String userJob;
     private final String isMembers;
-    private final List snsUrlList;
+    private final List<String> snsUrlList;
 }

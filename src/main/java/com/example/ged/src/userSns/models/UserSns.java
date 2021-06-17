@@ -26,7 +26,7 @@ public class UserSns extends BaseEntity {
     @JoinColumn(name = "userIdx", nullable = false)
     private UserInfo userInfo;
 
-    @Column(name="snsUrl",columnDefinition = "TEXT")
+    @Column(name="snsUrl",nullable = false,columnDefinition = "TEXT")
     private String snsUrl;
 
     @Column(name="status",nullable = false)

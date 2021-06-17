@@ -282,6 +282,16 @@ public class UserInfoController {
             return new BaseResponse<>(INVALID_IS_MEMBERS);
         }
 
+        if (patchUserInfoReq.getSnsUrlList() == null || patchUserInfoReq.getSnsUrlList().isEmpty()) {
+            return new BaseResponse<>(EMPTY_SNS_URL_LIST);
+        }
+
+        for(int i=0;i<patchUserInfoReq.getSnsUrlList().size();i++){
+            String url = patchUserInfoReq.getSnsUrlList().get(i);
+            if(!url.matches("^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")){
+                return new BaseResponse<>(INVALID_URL);
+            }
+        }
 
         try {
             PatchUserInfoRes patchUserInfoRes = userInfoService.updateUserInfo(jwtUserIdx, userIdx, patchUserInfoReq);

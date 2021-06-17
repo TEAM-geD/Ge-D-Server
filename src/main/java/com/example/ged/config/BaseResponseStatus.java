@@ -30,6 +30,8 @@ public enum BaseResponseStatus {
     EMPTY_REFERENCEIDX(false,2016,"referenceIdx를 입력하세요."),
     EMPTY_ID_TOKEN(false,2017,"ID token을 입력하세요."),
     EMPTY_USER_EMAIL(false,2018,"email을 입력하세요."),
+    EMPTY_SNS_URL_LIST(false,2019,"snsUrlList를 입력하세요."),
+    INVALID_URL(false,2020,"유효하지 않은 url입니다."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
@@ -48,8 +50,9 @@ public enum BaseResponseStatus {
     FAILED_TO_SAVE_REFERENCE_HEART(false,3014,"ReferenceHeart를 저장할 수 없습니다."),
     FAILED_TO_FIND_BY_USERINFO_AND_REFERENCE_AND_STATUS(false, 3015, "userInfo,reference,status로 ReferenceHeart 조회에 실패했습니다."),
     FAILED_TO_FIND_USERINFO_AND_STATUS(false, 3016, "userInfo, status로 ReferenceHeart 조회에 실패했습니다."),
-    FAILED_TO_FIND_BY_USERINFO_AND_STATUS(false, 3016, "userInfo, status로 UserSns 조회에 실패했습니다."),
-
+    FAILED_TO_FIND_BY_USERINFO_AND_STATUS(false, 3017, "userInfo, status로 UserSns 조회에 실패했습니다."),
+    FAILED_TO_DELETE_USER_SNS(false, 3018, "UserSns 삭제에 실패했습니다."),
+    FAILED_TO_SAVE_USER_SNS(false, 3019, "UserSns 저장에 실패했습니다."),
     // 4000 : Database 오류
     SERVER_ERROR(false, 4000, "서버와의 통신에 실패하였습니다."),
     DATABASE_ERROR(false, 4001, "데이터베이스 연결에 실패하였습니다."),
