@@ -4,8 +4,6 @@ import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.src.reference.models.GetReferenceRes;
 import com.example.ged.src.reference.models.GetReferencesRes;
-import com.example.ged.src.referenceHeart.ReferenceHeartProvider;
-import com.example.ged.src.referenceHeart.models.GetReferencesHeartRes;
 import com.example.ged.utils.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

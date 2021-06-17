@@ -8,15 +8,11 @@ import com.example.ged.src.referenceCategory.ReferenceCategoryProvider;
 import com.example.ged.src.referenceCategory.models.ReferenceCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.ged.config.BaseResponseStatus.*;
-import static com.example.ged.config.BaseResponseStatus.NOT_FOUND_REFERENCE_CATEGORY;
 
 @Service
 @RequiredArgsConstructor
