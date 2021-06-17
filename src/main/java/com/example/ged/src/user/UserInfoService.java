@@ -2,11 +2,14 @@ package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
 import com.example.ged.src.user.models.*;
+import com.example.ged.src.userSns.UserSnsRepository;
+import com.example.ged.src.userSns.models.UserSns;
 import com.example.ged.utils.*;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.example.ged.config.BaseResponseStatus.*;
@@ -25,6 +29,7 @@ public class UserInfoService {
     private final UserInfoProvider userInfoProvider;
     private final UserInfoRepository userInfoRepository;
     private final JwtService jwtService;
+    private final UserSnsRepository userSnsRepository;
 
     /**
      * 카카오 로그인 API
@@ -348,8 +353,8 @@ public class UserInfoService {
      * @return PatchUserInfoRes
      * @throws BaseException
      */
+    @Transactional
     public PatchUserInfoRes updateUserInfo(Integer jwtUserIdx, Integer userIdx, PatchUserInfoReq patchUserInfoReq) throws BaseException {
-        //jwt 확인
         if(userIdx != jwtUserIdx){
             throw new BaseException(FORBIDDEN_USER);
         }
@@ -361,6 +366,7 @@ public class UserInfoService {
         String backgroundImageUrl = patchUserInfoReq.getBackgroundImageUrl();
         String userJob = patchUserInfoReq.getUserJob();
         String isMembers = patchUserInfoReq.getIsMembers();
+        List<String> snsUrlList = patchUserInfoReq.getSnsUrlList();
 
         userInfo.setUserName(userName);
         userInfo.setIntroduce(introduce);
@@ -375,7 +381,34 @@ public class UserInfoService {
         }
 
 
-        return new PatchUserInfoRes(userIdx,userName,introduce,profileImageUrl,backgroundImageUrl,userJob,isMembers);
+        List<UserSns> userSnsList ;
+        try{
+            userSnsList = userSnsRepository.findByUserInfoAndStatus(userInfo,"ACTIVE");
+        }
+        catch (Exception ignored){
+            throw new BaseException(FAILED_TO_FIND_BY_USERINFO_AND_STATUS);
+        }
+
+        try {
+            for (int i=0;i<userSnsList.size();i++){
+                userSnsList.get(i).setStatus("INACTIVE");
+            }
+            userSnsRepository.saveAll(userSnsList);
+        } catch (Exception ignored) {
+            throw new BaseException(FAILED_TO_DELETE_USER_SNS);
+        }
+
+        try {
+            for (int i = 0; i < snsUrlList.size(); i++) {
+                String snsUrl = snsUrlList.get(i);
+                UserSns userSns = new UserSns(userInfo,snsUrl);
+                userSnsRepository.save(userSns);
+            }
+        } catch (Exception ignored) {
+            throw new BaseException(FAILED_TO_SAVE_USER_SNS);
+        }
+
+        return new PatchUserInfoRes(userIdx,userName,introduce,profileImageUrl,backgroundImageUrl,userJob,isMembers,snsUrlList);
     }
 
 
