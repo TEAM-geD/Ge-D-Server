@@ -89,17 +89,17 @@ public class UserInfoController {
     /**
      * 애플 로그인 API
      * [POST] /users/apple-signin
+     * @RequestBody postAppleSignInReq
      * @return BaseResponse<PostUserSignInRes>
      */
     @ResponseBody
     @PostMapping("/users/apple-signin")
-    public BaseResponse<PostUserSignInRes> postAppleSignIn() throws BaseException, ParseException {
+    public BaseResponse<PostUserSignInRes> postAppleSignIn(@RequestBody PostAppleSignInReq postAppleSignInReq) throws BaseException, ParseException {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String idToken = request.getHeader("APPLE-ID-TOKEN");
-        String userName = request.getHeader("USER-NAME");
-        String userEmail = request.getHeader("USER-EMAIL");
         String deviceToken = request.getHeader("DEVICE-TOKEN");
-
+        String userName = postAppleSignInReq.getUserName();
+        String userEmail = postAppleSignInReq.getUserEmail();
 
         if (deviceToken == null || deviceToken.length() == 0) {
             return new BaseResponse<>(EMPTY_DEVICE_TOKEN);
@@ -109,12 +109,10 @@ public class UserInfoController {
             return new BaseResponse<>(EMPTY_ID_TOKEN);
         }
 
-
-
         // idToken 디코딩하여 sub 뽑기
         SignedJWT signedJWT = SignedJWT.parse(idToken);
         ReadOnlyJWTClaimsSet payload = signedJWT.getJWTClaimsSet();
-        String socialId = payload.getSubject();
+        String socialId = "apple_"+payload.getSubject();
 
         // socialId db에 있는지 확인
         UserInfo existsUserInfo = userInfoProvider.retrieveUserInfoBySocialId(socialId);
@@ -129,6 +127,7 @@ public class UserInfoController {
                     return new BaseResponse<>(EMPTY_USER_EMAIL);
                 }
                 // 첫번째 로그인
+
                 postUserSignInRes = userInfoService.createAppleSignUp(socialId, userName, userEmail, deviceToken);
 
             }

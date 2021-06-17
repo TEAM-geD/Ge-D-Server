@@ -23,7 +23,7 @@ public class UserInfo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userIdx;
 
-    @Column(name="userName",nullable = false, length = 10)
+    @Column(name="userName",nullable = false, length = 20)
     private String userName;
 
     @Column(name="introduce", length = 40)
@@ -44,7 +44,7 @@ public class UserInfo extends BaseEntity {
     @Column(name="backgroundImageUrl",columnDefinition = "TEXT")
     private String backgroundImageUrl;
 
-    @Column(name="socialId",nullable = false, length = 100)
+    @Column(name="socialId",nullable = false,columnDefinition = "TEXT")
     private String socialId;
 
     @Column(name="email",nullable = false, length = 100)
