@@ -49,12 +49,12 @@ public class UserInfoProvider {
         try {
             userInfo = userInfoRepository.findById(userIdx).orElse(null); // 수정?
         } catch (Exception ignored) {
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(FAILED_TO_FIND_BY_USERIDX);
         }
 
         // 2. 존재하는 회원인지 확인
         if (userInfo == null || !userInfo.getStatus().equals("ACTIVE")) {
-            throw new BaseException(NOT_FOUND_USER);
+            throw new BaseException(INACTIVE_USER);
         }
 
         // 3. User를 return

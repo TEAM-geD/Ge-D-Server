@@ -166,7 +166,7 @@ public class UserInfoController {
      */
     @ResponseBody
     @PatchMapping("/users/{userIdx}/status")
-    public BaseResponse<Void> patchUserStatus(@PathVariable Integer userIdx) {
+    public BaseResponse<Void> patchUserStatus(@PathVariable Integer userIdx) throws BaseException {
 
 
         Integer jwtUserIdx;
@@ -179,6 +179,12 @@ public class UserInfoController {
         if(userIdx != jwtUserIdx){
             return new BaseResponse<>(FORBIDDEN_USER);
         }
+
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        if(userInfo == null){
+            return new BaseResponse<>(INVALID_USER);
+        }
+
 
         try {
             userInfoService.updateUserStatus(userIdx);
@@ -209,6 +215,10 @@ public class UserInfoController {
             return new BaseResponse<>(FORBIDDEN_USER);
         }
 
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        if(userInfo == null){
+            return new BaseResponse<>(INVALID_USER);
+        }
 
         try {
             GetUserInfoRes getUserInfoRes = userInfoProvider.retrieveUserInfo(userIdx);
@@ -234,6 +244,15 @@ public class UserInfoController {
             jwtUserIdx = jwtService.getUserIdx();
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
+        }
+
+        if(userIdx != jwtUserIdx){
+            return new BaseResponse<>(FORBIDDEN_USER);
+        }
+
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        if(userInfo == null){
+            return new BaseResponse<>(INVALID_USER);
         }
 
         if (patchUserInfoReq.getUserName() == null || patchUserInfoReq.getUserName().length() == 0 ) {
