@@ -8,11 +8,11 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class GetProjectsRes {
-    private Integer projectIdx;
-    private String projectThumbnailImageUrl;
-    private String projectName;
-    private List<String> projectJobNameList;
-    private Integer userIdx;
-    private String userName;
-    private String userJob;
+    private final Integer projectIdx;
+    private final String projectThumbnailImageUrl;
+    private final String projectName;
+    private final List<String> projectJobNameList;
+    private final Integer userIdx;
+    private final String userName;
+    private final String userJob;
 }
