@@ -149,5 +149,23 @@ public class ProjectController {
         }
     }
 
+    /**
+     * 2021-06-24
+     * 프로젝트 삭제 API
+     * @param projectIdx
+     * @return
+     */
+    @ResponseBody
+    @PatchMapping("/projects/{projectIdx}/status")
+    @Operation(summary = "프로젝트 삭제 API")
+    public BaseResponse<String> deleteProject(@PathVariable(required = true,value = "projectIdx") Integer projectIdx){
+        try{
+            Integer userIdx=  jwtService.getUserIdx();
+            projectService.deleteProject(userIdx,projectIdx);
+            return new BaseResponse<>(SUCCESS);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }

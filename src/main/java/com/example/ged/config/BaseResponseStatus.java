@@ -72,6 +72,7 @@ public enum BaseResponseStatus {
     INACTIVE_USER(false, 3021, "비활성화된 유저입니다."),
     FAILED_TO_POST_PROJECT(false,3022,"프로젝트 등록에 실패했습니다."),
     FAILED_TO_GET_PROJECT(false,3023,"프로젝트 조회에 실패했습니다."),
+    NOT_YOUR_PROJECT(false,3024,"프로젝트 소유자가 아닙니다."),
 
 
     // 4000 : Database 오류

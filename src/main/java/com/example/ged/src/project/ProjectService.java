@@ -67,4 +67,28 @@ public class ProjectService {
 
     }
 
+    /**
+     * 프로젝트 삭제
+     * @param userIdx
+     * @param projectIdx
+     * @throws BaseException
+     */
+    @Transactional
+    public void deleteProject(Integer userIdx, Integer projectIdx) throws BaseException{
+        Project project = projectRepository.findProjectByProjectIdxAndStatus(projectIdx,"ACTIVE");
+        if(project == null){
+            throw new BaseException(FAILED_TO_GET_PROJECT);
+        }
+        if(userIdx!=project.getUserInfo().getUserIdx()){
+            throw new BaseException(NOT_YOUR_PROJECT);
+        }
+        project.setStatus("INACTIVE");
+        try{
+            projectRepository.save(project);
+        }catch (Exception exception){
+            throw new BaseException(FAILED_TO_POST_PROJECT);
+        }
+    }
+
+
 }
