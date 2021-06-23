@@ -66,4 +66,20 @@ public class Project extends BaseEntity {
 
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
+
+    public Project(UserInfo userInfo, String projectName, String projectThumbNailImgUrl, String projectImgUrl1, String projectImgUrl2, String projectImgUrl3, String projectDescription1, String projectDescription2, String projectDescription3, String applyKakaoLinkUrl, String applyGoogleFoamUrl, int projectStatus) {
+        this.userInfo = userInfo;
+        this.projectName = projectName;
+        this.projectThumbnailImageUrl = projectThumbNailImgUrl;
+        this.projectImageUrl1 = projectImgUrl1;
+        this.projectImageUrl2 = projectImgUrl2;
+        this.projectImageUrl3 = projectImgUrl3;
+        this.projectDescription1 = projectDescription1;
+        this.projectDescription2 = projectDescription2;
+        this.projectDescription3 = projectDescription3;
+        this.applyKakaoLinkUrl = applyKakaoLinkUrl;
+        this.applyGoogleFoamUrl = applyGoogleFoamUrl;
+        this.projectStatus = projectStatus;
+
+    }
 }

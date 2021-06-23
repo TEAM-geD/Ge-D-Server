@@ -29,4 +29,9 @@ public class ProjectCategory extends BaseEntity {
 
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
+
+    public ProjectCategory(Project project, String projectCategoryName) {
+        this.project = project;
+        this.projectCategoryName = projectCategoryName;
+    }
 }

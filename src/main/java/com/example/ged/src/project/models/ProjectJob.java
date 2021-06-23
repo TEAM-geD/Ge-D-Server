@@ -27,4 +27,9 @@ public class ProjectJob {
 
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
+
+    public ProjectJob(Project project, String projectJobName) {
+        this.project = project;
+        this.projectJobName = projectJobName;
+    }
 }

@@ -33,6 +33,20 @@ public enum BaseResponseStatus {
     EMPTY_SNS_URL_LIST(false,2019,"snsUrlList를 입력하세요."),
     INVALID_URL(false,2020,"유효하지 않은 url입니다."),
     INVALID_USER(false,2021,"유효하지 않은 user입니다."),
+    EMPTY_PROJECT_CATEGORY(false,2022,"프로젝트 카테고리를 선택해주세요."),
+    INVALID_PROJECT_CATEGORY(false,2023,"유효하지 않은 프로젝트 카테고리입니다."),
+    EMPTY_PROJECT_NAME(false,2024,"프로젝트명을 입력하세요."),
+    EMPTY_PROJECT_JOB(false,2025,"프로젝트 모집 직군을 선택해주세요."),
+    INVALID_PROJECT_JOB(false,2026,"유효하지 않은 프로젝트 모집 직군입니다."),
+    EMPTY_PROJECT_THUMBNAIL_URL(false,2027,"프로젝트 썸네일이 누락되었습니다."),
+    EMPTY_PROJECT_IMAGE_1(false,2028,"프로젝트 이미지(1)가  누락되었습니다."),
+    EMPTY_PROJECT_DESCRIPTION_1(false,2029,"프로젝트 설명(1) 가 누락되었습니다."),
+    EMPTY_PROJECT_IMAGE_2(false,2030,"프로젝트 이미지(2) 가 누락되었습니다."),
+    EMPTY_PROJECT_DESCRIPTION_2(false,2031,"프로젝트 설명(2) 가 누락되었습니다."),
+    EMPTY_PROJECT_IMAGE_3(false,2032,"프로젝트 이미지(3) 가 누락되었습니다."),
+    EMPTY_PROJECT_DESCRIPTION_3(false,2033,"프로젝트 설명(3) 가 누락되었습니다."),
+    EMPTY_APPLY_KAKAO_LINK_URL(false,2034,"카카오톡 신청 링크 URL 을 입력해주세요."),
+    EMPTY_APPLY_GOOGLE_FOAM_URL(false,2035,"구글폼 신청 링크 URL 을 입력해주세요."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
@@ -56,6 +70,7 @@ public enum BaseResponseStatus {
     FAILED_TO_SAVE_USER_SNS(false, 3019, "UserSns 저장에 실패했습니다."),
     FAILED_TO_FIND_BY_USERIDX(false, 3020, "userIdx로 UserInfo 조회에 실패했습니다."),
     INACTIVE_USER(false, 3021, "비활성화된 유저입니다."),
+    FAILED_TO_POST_PROJECT(false,3022,"프로젝트 등록에 실패했습니다."),
 
 
     // 4000 : Database 오류
