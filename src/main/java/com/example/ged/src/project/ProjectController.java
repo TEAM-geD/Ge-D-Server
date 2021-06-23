@@ -3,11 +3,14 @@ package com.example.ged.src.project;
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.config.BaseResponseStatus;
+import com.example.ged.src.project.models.dto.GetProjectsRes;
 import com.example.ged.src.project.models.dto.PostProjectReq;
 import com.example.ged.utils.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.example.ged.config.BaseResponseStatus.*;
 
@@ -18,6 +21,7 @@ import static com.example.ged.config.BaseResponseStatus.*;
 public class ProjectController {
     private final JwtService jwtService;
     private final ProjectService projectService;
+    private final ProjectProvider projectProvider;
 
     /**
      * 2021-06-23
@@ -102,4 +106,21 @@ public class ProjectController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @ResponseBody
+    @GetMapping("/projects")
+    @Operation(summary = "프로젝트 리스트 조회 API")
+    public BaseResponse<List<GetProjectsRes>> getProjects(@RequestParam(value="type",required = true)String type){
+        if(!type.equals("ALL") || !type.equals("AOS") || !type.equals("IOS") || !type.equals("WEB")){
+            return new BaseResponse<>(INVALID_PROJECT_CATEGORY);
+        }
+        try{
+            Integer userIdx = jwtService.getUserIdx();
+            List<GetProjectsRes> getProjectsResList = projectProvider.getProjects(type);
+            return new BaseResponse<>(SUCCESS,getProjectsResList);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 }
