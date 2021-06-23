@@ -5,6 +5,7 @@ import com.example.ged.config.BaseResponse;
 import com.example.ged.config.BaseResponseStatus;
 import com.example.ged.src.project.models.dto.GetProjectRes;
 import com.example.ged.src.project.models.dto.GetProjectsRes;
+import com.example.ged.src.project.models.dto.PatchProjectReq;
 import com.example.ged.src.project.models.dto.PostProjectReq;
 import com.example.ged.utils.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -167,5 +168,93 @@ public class ProjectController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /**
+     * 2021-06-24
+     * 프로젝트 수정 API
+     * @param projectIdx
+     * @return
+     */
+    @ResponseBody
+    @PatchMapping("/projects/{projectIdx}")
+    @Operation(summary = "프로젝트 수정 API")
+    public BaseResponse<String> updateProject(@PathVariable(required = true,value = "projectIdx")Integer projectIdx,
+                                              @RequestBody PatchProjectReq patchProjectReq){
+
+        //프로젝트 카테고리를 아무것도 선택하지 않은 경우
+        if(patchProjectReq.getProjectCategoryNameList().size()==0 || patchProjectReq.getProjectCategoryNameList().isEmpty()){
+            return new BaseResponse<>(EMPTY_PROJECT_CATEGORY);
+        }
+        //프로젝트 카테고리가 AOS, IOS, WEB 이 아닌 경우
+        if(!patchProjectReq.getProjectCategoryNameList().isEmpty()){
+            for(int i=0;i<patchProjectReq.getProjectCategoryNameList().size();i++){
+                if(!patchProjectReq.getProjectCategoryNameList().get(i).equals("AOS") || !patchProjectReq.getProjectCategoryNameList().get(i).equals("IOS") || !patchProjectReq.getProjectCategoryNameList().get(i).equals("WEB")){
+                    return new BaseResponse<>(INVALID_PROJECT_CATEGORY);
+                }
+            }
+        }
+        //프로젝트명을 입력하지 않은 경우
+        if(patchProjectReq.getProjectName()==null || patchProjectReq.getProjectName().length()==0){
+            return new BaseResponse<>(EMPTY_PROJECT_NAME);
+        }
+        //프로젝트 모집 직군을 아무것도 선택하지 않은 경우
+        if(patchProjectReq.getProjectJobNameList().size()==0 || patchProjectReq.getProjectJobNameList().isEmpty()){
+            return new BaseResponse<>(EMPTY_PROJECT_JOB);
+        }
+        //프로젝트 모집 직군이 "기획자", "개발자", "디자이너" 가 아닌 경우
+        if(!patchProjectReq.getProjectJobNameList().isEmpty()){
+            for(int i=0;i<patchProjectReq.getProjectJobNameList().size();i++){
+                if(!patchProjectReq.getProjectJobNameList().get(i).equals("기획자") || !patchProjectReq.getProjectJobNameList().get(i).equals("개발자") || !patchProjectReq.getProjectJobNameList().get(i).equals("디자이너")){
+                    return new BaseResponse<>(INVALID_PROJECT_JOB);
+                }
+            }
+        }
+        //프로젝트 썸네일이 누락된 경우
+        if(patchProjectReq.getProjectThumbnailImageUrl() == null || patchProjectReq.getProjectThumbnailImageUrl().length()==0){
+            return new BaseResponse<>(EMPTY_PROJECT_THUMBNAIL_URL);
+        }
+        //프로젝트 이미지 1 을 입력하지 않은 경우
+        if(patchProjectReq.getProjectImageUrl1() == null || patchProjectReq.getProjectImageUrl1().length()==0){
+            return new BaseResponse<>(EMPTY_PROJECT_IMAGE_1);
+        }
+        //프로젝트 설명 1 을 입력하지 않은 경우
+        if(patchProjectReq.getProjectDescription1() == null || patchProjectReq.getProjectDescription1().length()==0){
+            return new BaseResponse<>(EMPTY_PROJECT_DESCRIPTION_1);
+        }
+        //프로젝트 이미지 2 을 입력하지 않은 경우
+        if(patchProjectReq.getProjectImageUrl2() == null || patchProjectReq.getProjectImageUrl2().length()==0){
+            return new BaseResponse<>(EMPTY_PROJECT_IMAGE_2);
+        }
+        //프로젝트 설명 2 을 입력하지 않은 경우
+        if(patchProjectReq.getProjectDescription2() == null || patchProjectReq.getProjectDescription2().length()==0){
+            return new BaseResponse<>(EMPTY_PROJECT_DESCRIPTION_2);
+        }
+        //프로젝트 이미지 3 을 입력하지 않은 경우
+        if(patchProjectReq.getProjectImageUrl3() == null || patchProjectReq.getProjectImageUrl3().length()==0){
+            return new BaseResponse<>(EMPTY_PROJECT_IMAGE_3);
+        }
+        //프로젝트 설명 3 을 입력하지 않은 경우
+        if(patchProjectReq.getProjectDescription3() == null || patchProjectReq.getProjectDescription3().length()==0){
+            return new BaseResponse<>(EMPTY_PROJECT_DESCRIPTION_3);
+        }
+        //카카오톡 신청 URL 둘 중 하나도 입력하지 않은 경우
+        if(patchProjectReq.getApplyKakaoLinkUrl() == null && patchProjectReq.getApplyKakaoLinkUrl().length() == 0){
+            return new BaseResponse<>(EMPTY_APPLY_KAKAO_LINK_URL);
+        }
+        //구글 신청 폼을 입력하지 않은 경우
+        if(patchProjectReq.getApplyGoogleFoamUrl() == null || patchProjectReq.getApplyGoogleFoamUrl().length() == 0){
+            return new BaseResponse<>(EMPTY_APPLY_GOOGLE_FOAM_URL);
+        }
+
+        try{
+            Integer userIdx = jwtService.getUserIdx();
+            projectService.updateProject(userIdx,projectIdx,patchProjectReq);
+            return new BaseResponse<>(SUCCESS);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
 
 }

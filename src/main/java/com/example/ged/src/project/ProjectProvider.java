@@ -72,7 +72,8 @@ public class ProjectProvider {
                 project.getProjectDescription3(),
                 project.getApplyKakaoLinkUrl(),
                 project.getApplyGoogleFoamUrl(),
-                0);
+                0,
+                project.getProjectStatus());
         return getProjectRes;
     }
 }
