@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 public class GetProjectsRes {
     private Integer projectIdx;
-    private String projectThumbnailUrl;
+    private String projectThumbnailImageUrl;
     private String projectName;
     private List<String> projectJobNameList;
     private Integer userIdx;

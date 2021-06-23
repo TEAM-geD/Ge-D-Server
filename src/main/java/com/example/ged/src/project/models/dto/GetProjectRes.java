@@ -1,18 +1,14 @@
 package com.example.ged.src.project.models.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-
-@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class PostProjectReq {
-    private List<String> projectCategoryNameList;
+public class GetProjectRes {
+    private Integer projectIdx;
     private String projectName;
-    private List<String> projectJobNameList;
-    private String projectThumbnailImageUrl;
+    private String projectThumbNailImageUrl;
     private String projectImageUrl1;
     private String projectDescription1;
     private String projectImageUrl2;
@@ -21,4 +17,5 @@ public class PostProjectReq {
     private String projectDescription3;
     private String applyKakaoLinkUrl;
     private String applyGoogleFoamUrl;
+    private Integer projectLikeStatus;//찜하기 눌렀으면 1, 안눌렀으면 0
 }

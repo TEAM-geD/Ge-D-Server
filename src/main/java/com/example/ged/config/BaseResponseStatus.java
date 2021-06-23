@@ -71,6 +71,7 @@ public enum BaseResponseStatus {
     FAILED_TO_FIND_BY_USERIDX(false, 3020, "userIdx로 UserInfo 조회에 실패했습니다."),
     INACTIVE_USER(false, 3021, "비활성화된 유저입니다."),
     FAILED_TO_POST_PROJECT(false,3022,"프로젝트 등록에 실패했습니다."),
+    FAILED_TO_GET_PROJECT(false,3023,"프로젝트 조회에 실패했습니다."),
 
 
     // 4000 : Database 오류

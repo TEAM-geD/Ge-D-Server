@@ -32,10 +32,10 @@ public class ProjectService {
         UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
 
         String projectName = postProjectReq.getProjectName();
-        String projectThumbNailImgUrl = postProjectReq.getProjectThumbNailImgUrl();
-        String projectImgUrl1 = postProjectReq.getProjectImgUrl1();
-        String projectImgUrl2 = postProjectReq.getProjectImgUrl2();
-        String projectImgUrl3 = postProjectReq.getProjectImgUrl3();
+        String projectThumbNailImgUrl = postProjectReq.getProjectThumbnailImageUrl();
+        String projectImgUrl1 = postProjectReq.getProjectImageUrl1();
+        String projectImgUrl2 = postProjectReq.getProjectImageUrl2();
+        String projectImgUrl3 = postProjectReq.getProjectImageUrl3();
         String projectDescription1 = postProjectReq.getProjectDescription1();
         String projectDescription2 = postProjectReq.getProjectDescription2();
         String projectDescription3 = postProjectReq.getProjectDescription3();

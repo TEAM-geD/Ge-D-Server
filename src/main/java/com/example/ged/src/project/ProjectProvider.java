@@ -3,11 +3,14 @@ package com.example.ged.src.project;
 import com.example.ged.config.BaseException;
 import com.example.ged.src.project.models.Project;
 import com.example.ged.src.project.models.ProjectJob;
+import com.example.ged.src.project.models.dto.GetProjectRes;
 import com.example.ged.src.project.models.dto.GetProjectsRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.ged.config.BaseResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +20,7 @@ public class ProjectProvider {
     private final ProjectJobRepository projectJobRepository;
 
     /**
-     * 프로젝트 리스트 조회 API
+     * 프로젝트 리스트 조회
      * @param type
      * @return
      * @throws BaseException
@@ -43,5 +46,33 @@ public class ProjectProvider {
             getProjectsResList.add(getProjectsRes);
         }
         return getProjectsResList;
+    }
+
+    /**
+     * 프로젝트 상세조회
+     * @param userIdx
+     * @param projectIdx
+     * @return
+     * @throws BaseException
+     */
+    public GetProjectRes getProject(Integer userIdx,Integer projectIdx) throws BaseException{
+        Project project = projectRepository.findProjectByProjectIdxAndStatus(projectIdx,"ACTIVE");
+        if(project == null){
+            throw new BaseException(FAILED_TO_GET_PROJECT);
+        }
+        //todo 회원이 찜한 내역인지에 대한 구분 필요
+        GetProjectRes getProjectRes = new GetProjectRes(project.getProjectIdx(),
+                project.getProjectName(),
+                project.getProjectThumbnailImageUrl(),
+                project.getProjectImageUrl1(),
+                project.getProjectDescription1(),
+                project.getProjectImageUrl2(),
+                project.getProjectDescription2(),
+                project.getProjectImageUrl3(),
+                project.getProjectDescription3(),
+                project.getApplyKakaoLinkUrl(),
+                project.getApplyGoogleFoamUrl(),
+                0);
+        return getProjectRes;
     }
 }

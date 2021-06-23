@@ -3,6 +3,7 @@ package com.example.ged.src.project;
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.config.BaseResponseStatus;
+import com.example.ged.src.project.models.dto.GetProjectRes;
 import com.example.ged.src.project.models.dto.GetProjectsRes;
 import com.example.ged.src.project.models.dto.PostProjectReq;
 import com.example.ged.utils.JwtService;
@@ -63,11 +64,11 @@ public class ProjectController {
             }
         }
         //프로젝트 썸네일이 누락된 경우
-        if(postProjectReq.getProjectThumbNailImgUrl() == null || postProjectReq.getProjectThumbNailImgUrl().length()==0){
+        if(postProjectReq.getProjectThumbnailImageUrl() == null || postProjectReq.getProjectThumbnailImageUrl().length()==0){
             return new BaseResponse<>(EMPTY_PROJECT_THUMBNAIL_URL);
         }
         //프로젝트 이미지 1 을 입력하지 않은 경우
-        if(postProjectReq.getProjectImgUrl1() == null || postProjectReq.getProjectImgUrl1().length()==0){
+        if(postProjectReq.getProjectImageUrl1() == null || postProjectReq.getProjectImageUrl1().length()==0){
             return new BaseResponse<>(EMPTY_PROJECT_IMAGE_1);
         }
         //프로젝트 설명 1 을 입력하지 않은 경우
@@ -75,7 +76,7 @@ public class ProjectController {
             return new BaseResponse<>(EMPTY_PROJECT_DESCRIPTION_1);
         }
         //프로젝트 이미지 2 을 입력하지 않은 경우
-        if(postProjectReq.getProjectImgUrl2() == null || postProjectReq.getProjectImgUrl2().length()==0){
+        if(postProjectReq.getProjectImageUrl2() == null || postProjectReq.getProjectImageUrl2().length()==0){
             return new BaseResponse<>(EMPTY_PROJECT_IMAGE_2);
         }
         //프로젝트 설명 2 을 입력하지 않은 경우
@@ -83,7 +84,7 @@ public class ProjectController {
             return new BaseResponse<>(EMPTY_PROJECT_DESCRIPTION_2);
         }
         //프로젝트 이미지 3 을 입력하지 않은 경우
-        if(postProjectReq.getProjectImgUrl3() == null || postProjectReq.getProjectImgUrl3().length()==0){
+        if(postProjectReq.getProjectImageUrl3() == null || postProjectReq.getProjectImageUrl3().length()==0){
             return new BaseResponse<>(EMPTY_PROJECT_IMAGE_3);
         }
         //프로젝트 설명 3 을 입력하지 않은 경우
@@ -107,6 +108,12 @@ public class ProjectController {
         }
     }
 
+    /**
+     * 2021-06-24
+     * 프로젝트 리스트 조회 API
+     * @param type
+     * @return
+     */
     @ResponseBody
     @GetMapping("/projects")
     @Operation(summary = "프로젝트 리스트 조회 API")
@@ -122,5 +129,25 @@ public class ProjectController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    /**
+     * 2021-06-24
+     * 프로젝트 상세 조회 API
+     * @param projectIdx
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/projects/{projectIdx}")
+    @Operation(summary = "프로젝트 상세 조회 API")
+    public BaseResponse<GetProjectRes> getProject(@PathVariable(required = true,value = "projectIdx") Integer projectIdx){
+        try{
+            Integer userIdx = jwtService.getUserIdx();
+            GetProjectRes getProjectRes = projectProvider.getProject(userIdx,projectIdx);
+            return new BaseResponse<>(SUCCESS,getProjectRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 
 }
