@@ -47,7 +47,7 @@ public class ProjectProvider {
                 projectJobNameList.add(projectJob.getProjectJobName());
             }
 
-            GetProjectsRes getProjectsRes = new GetProjectsRes(project.getProjectIdx(),project.getProjectThumbnailImageUrl(),project.getProjectName(),projectJobNameList,project.getUserInfo().getUserIdx(),project.getUserInfo().getUserName(),project.getUserInfo().getUserName());
+            GetProjectsRes getProjectsRes = new GetProjectsRes(project.getProjectIdx(),project.getProjectThumbnailImageUrl(),project.getProjectName(),projectJobNameList,project.getUserInfo().getUserIdx(),project.getUserInfo().getUserName(),project.getUserInfo().getUserName(),project.getUserInfo().getProfileImageUrl());
             getProjectsResList.add(getProjectsRes);
         }
         return getProjectsResList;

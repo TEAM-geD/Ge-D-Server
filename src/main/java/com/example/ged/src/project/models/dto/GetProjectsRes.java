@@ -15,4 +15,5 @@ public class GetProjectsRes {
     private final Integer userIdx;
     private final String userName;
     private final String userJob;
+    private final String userProfileImageUrl;
 }
