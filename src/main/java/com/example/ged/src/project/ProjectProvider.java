@@ -5,6 +5,9 @@ import com.example.ged.src.project.models.Project;
 import com.example.ged.src.project.models.ProjectJob;
 import com.example.ged.src.project.models.dto.GetProjectRes;
 import com.example.ged.src.project.models.dto.GetProjectsRes;
+import com.example.ged.src.projectHeart.ProjectHeartProvider;
+import com.example.ged.src.user.UserInfoProvider;
+import com.example.ged.src.user.models.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,8 @@ public class ProjectProvider {
 
     private final ProjectRepository projectRepository;
     private final ProjectJobRepository projectJobRepository;
+    private final UserInfoProvider userInfoProvider;
+    private final ProjectHeartProvider projectHeartProvider;
 
     /**
      * 프로젝트 리스트 조회
@@ -57,10 +62,24 @@ public class ProjectProvider {
      */
     public GetProjectRes getProject(Integer userIdx,Integer projectIdx) throws BaseException{
         Project project = projectRepository.findProjectByProjectIdxAndStatus(projectIdx,"ACTIVE");
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+
         if(project == null){
             throw new BaseException(FAILED_TO_GET_PROJECT);
         }
-        //todo 회원이 찜한 내역인지에 대한 구분 필요
+
+        //찜하지 않은 경우 : 0, 찜한 경우 : 1
+        Integer projectLikeStatus = 0;
+
+        //이미 찜한 경우
+        if(projectHeartProvider.existProjectHeart(userIdx,projectIdx)){
+            projectLikeStatus = 1;
+        }
+        //찜하지 않은 경우
+        else{
+            projectLikeStatus = 0;
+        }
+
         GetProjectRes getProjectRes = new GetProjectRes(project.getProjectIdx(),
                 project.getProjectName(),
                 project.getProjectThumbnailImageUrl(),
@@ -72,7 +91,7 @@ public class ProjectProvider {
                 project.getProjectDescription3(),
                 project.getApplyKakaoLinkUrl(),
                 project.getApplyGoogleFoamUrl(),
-                0,
+                projectLikeStatus,
                 project.getProjectStatus());
         return getProjectRes;
     }
