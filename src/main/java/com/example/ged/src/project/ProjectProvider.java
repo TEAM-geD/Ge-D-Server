@@ -76,4 +76,12 @@ public class ProjectProvider {
                 project.getProjectStatus());
         return getProjectRes;
     }
+
+    public Project retrieveProjectByProjectIdx(Integer projectIdx) throws BaseException{
+        Project project = projectRepository.findProjectByProjectIdxAndStatus(projectIdx,"ACTIVE");
+        if(project == null){
+            throw new BaseException(FAILED_TO_GET_PROJECT);
+        }
+        return project;
+    }
 }
