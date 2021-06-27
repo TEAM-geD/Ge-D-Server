@@ -1,4 +1,4 @@
-package com.example.ged.src.project.models.dto;
+package com.example.ged.src.projectHeart.models.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class GetProjectsRes {
+public class GetProjectsHeartRes {
     private final Integer projectIdx;
     private final String projectThumbnailImageUrl;
     private final String projectName;
