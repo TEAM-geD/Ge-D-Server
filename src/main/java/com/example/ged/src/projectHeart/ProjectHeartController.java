@@ -1,11 +1,14 @@
 package com.example.ged.src.projectHeart;
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
+import com.example.ged.src.projectHeart.models.dto.GetProjectsHeartRes;
 import com.example.ged.src.projectHeart.models.dto.PostProjectHeartReq;
 import com.example.ged.utils.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.example.ged.config.BaseResponseStatus.SUCCESS;
 
@@ -45,6 +48,23 @@ public class ProjectHeartController {
         }catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
+    }
 
+    /**
+     * 2021-06-27
+     * 프로젝트 찜한 내역 리스트 조회 API
+     * @return
+     */
+    @GetMapping("/projects/heart")
+    @ResponseBody
+    @Operation(summary="프로젝트 찜한 내역 리스트 조회 API")
+    public BaseResponse<List<GetProjectsHeartRes>> getProjectsHeart(){
+        try{
+            Integer userIdx = jwtService.getUserIdx();
+            List<GetProjectsHeartRes> getProjectsHeartResList = projectHeartProvider.getProjectsHeartList(userIdx);
+            return new BaseResponse<>(SUCCESS,getProjectsHeartResList);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
     }
 }

@@ -11,6 +11,7 @@ import com.example.ged.src.user.models.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.ged.config.BaseResponseStatus.*;
@@ -32,7 +33,7 @@ public class ProjectProvider {
      */
     public List<GetProjectsRes> getProjects(String type) throws BaseException {
 
-        List<GetProjectsRes> getProjectsResList = null;
+        List<GetProjectsRes> getProjectsResList = new ArrayList<>();
         List<Project> projectList = null;
         if(type.equals("ALL")){
             projectList = projectRepository.findProjectByStatus("ACTIVE");
@@ -41,7 +42,7 @@ public class ProjectProvider {
         }
         for(Project project : projectList){
             List<ProjectJob> projectJobList = projectJobRepository.findAllByProject(project);
-            List<String> projectJobNameList = null;
+            List<String> projectJobNameList = new ArrayList<>();
 
             for(ProjectJob projectJob : projectJobList){
                 projectJobNameList.add(projectJob.getProjectJobName());
