@@ -6,6 +6,7 @@ import com.example.ged.src.project.models.ProjectJob;
 import com.example.ged.src.project.models.dto.GetProjectRes;
 import com.example.ged.src.project.models.dto.GetProjectsRes;
 import com.example.ged.src.projectHeart.ProjectHeartProvider;
+import com.example.ged.src.projectHeart.ProjectHeartRepository;
 import com.example.ged.src.user.UserInfoProvider;
 import com.example.ged.src.user.models.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class ProjectProvider {
     private final ProjectRepository projectRepository;
     private final ProjectJobRepository projectJobRepository;
     private final UserInfoProvider userInfoProvider;
-    private final ProjectHeartProvider projectHeartProvider;
+    private final ProjectHeartRepository projectHeartRepository;
 
     /**
      * 프로젝트 리스트 조회
@@ -71,9 +72,10 @@ public class ProjectProvider {
 
         //찜하지 않은 경우 : 0, 찜한 경우 : 1
         Integer projectLikeStatus = 0;
+        Boolean existProjectHeart = projectHeartRepository.existsByUserInfoAndProjectAndStatus(userInfo,project,"ACTIVE");
 
         //이미 찜한 경우
-        if(projectHeartProvider.existProjectHeart(userIdx,projectIdx)){
+        if(existProjectHeart){
             projectLikeStatus = 1;
         }
         //찜하지 않은 경우
