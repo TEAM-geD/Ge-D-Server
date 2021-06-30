@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.ged.config.BaseResponseStatus.*;
@@ -40,10 +41,15 @@ public class ProjectController {
         if(postProjectReq.getProjectCategoryNameList().size()==0 || postProjectReq.getProjectCategoryNameList().isEmpty()){
             return new BaseResponse<>(EMPTY_PROJECT_CATEGORY);
         }
+        ArrayList<String> categoryList = new ArrayList<>();
+        categoryList.add("AOS");
+        categoryList.add("IOS");
+        categoryList.add("WEB");
+
         //프로젝트 카테고리가 AOS, IOS, WEB 이 아닌 경우
         if(!postProjectReq.getProjectCategoryNameList().isEmpty()){
             for(int i=0;i<postProjectReq.getProjectCategoryNameList().size();i++){
-                if(!postProjectReq.getProjectCategoryNameList().get(i).equals("AOS") || !postProjectReq.getProjectCategoryNameList().get(i).equals("IOS") || !postProjectReq.getProjectCategoryNameList().get(i).equals("WEB")){
+                if(!categoryList.contains(postProjectReq.getProjectCategoryNameList().get(i))){
                     return new BaseResponse<>(INVALID_PROJECT_CATEGORY);
                 }
             }
@@ -56,10 +62,15 @@ public class ProjectController {
         if(postProjectReq.getProjectJobNameList().size()==0 || postProjectReq.getProjectJobNameList().isEmpty()){
             return new BaseResponse<>(EMPTY_PROJECT_JOB);
         }
+
+        ArrayList<String> jobList = new ArrayList<>();
+        jobList.add("기획자");
+        jobList.add("개발자");
+        jobList.add("디자이너");
         //프로젝트 모집 직군이 "기획자", "개발자", "디자이너" 가 아닌 경우
         if(!postProjectReq.getProjectJobNameList().isEmpty()){
             for(int i=0;i<postProjectReq.getProjectJobNameList().size();i++){
-                if(!postProjectReq.getProjectJobNameList().get(i).equals("기획자") || !postProjectReq.getProjectJobNameList().get(i).equals("개발자") || !postProjectReq.getProjectJobNameList().get(i).equals("디자이너")){
+                if(!jobList.contains(postProjectReq.getProjectJobNameList().get(i))){
                     return new BaseResponse<>(INVALID_PROJECT_JOB);
                 }
             }
@@ -119,7 +130,13 @@ public class ProjectController {
     @GetMapping("/projects")
     @Operation(summary = "프로젝트 리스트 조회 API")
     public BaseResponse<List<GetProjectsRes>> getProjects(@RequestParam(value="type",required = true)String type){
-        if(!type.equals("ALL") || !type.equals("AOS") || !type.equals("IOS") || !type.equals("WEB")){
+        ArrayList<String> categoryList = new ArrayList<>();
+        categoryList.add("ALL");
+        categoryList.add("AOS");
+        categoryList.add("IOS");
+        categoryList.add("WEB");
+
+        if(!categoryList.contains(type)){
             return new BaseResponse<>(INVALID_PROJECT_CATEGORY);
         }
         try{
@@ -185,10 +202,15 @@ public class ProjectController {
         if(patchProjectReq.getProjectCategoryNameList().size()==0 || patchProjectReq.getProjectCategoryNameList().isEmpty()){
             return new BaseResponse<>(EMPTY_PROJECT_CATEGORY);
         }
+        ArrayList<String> categoryList = new ArrayList<>();
+        categoryList.add("AOS");
+        categoryList.add("IOS");
+        categoryList.add("WEB");
+
         //프로젝트 카테고리가 AOS, IOS, WEB 이 아닌 경우
         if(!patchProjectReq.getProjectCategoryNameList().isEmpty()){
             for(int i=0;i<patchProjectReq.getProjectCategoryNameList().size();i++){
-                if(!patchProjectReq.getProjectCategoryNameList().get(i).equals("AOS") || !patchProjectReq.getProjectCategoryNameList().get(i).equals("IOS") || !patchProjectReq.getProjectCategoryNameList().get(i).equals("WEB")){
+                if(!categoryList.contains(patchProjectReq.getProjectCategoryNameList().get(i))){
                     return new BaseResponse<>(INVALID_PROJECT_CATEGORY);
                 }
             }
@@ -201,10 +223,15 @@ public class ProjectController {
         if(patchProjectReq.getProjectJobNameList().size()==0 || patchProjectReq.getProjectJobNameList().isEmpty()){
             return new BaseResponse<>(EMPTY_PROJECT_JOB);
         }
+
+        ArrayList<String> jobList = new ArrayList<>();
+        jobList.add("기획자");
+        jobList.add("개발자");
+        jobList.add("디자이너");
         //프로젝트 모집 직군이 "기획자", "개발자", "디자이너" 가 아닌 경우
         if(!patchProjectReq.getProjectJobNameList().isEmpty()){
             for(int i=0;i<patchProjectReq.getProjectJobNameList().size();i++){
-                if(!patchProjectReq.getProjectJobNameList().get(i).equals("기획자") || !patchProjectReq.getProjectJobNameList().get(i).equals("개발자") || !patchProjectReq.getProjectJobNameList().get(i).equals("디자이너")){
+                if(!jobList.contains(patchProjectReq.getProjectJobNameList().get(i))){
                     return new BaseResponse<>(INVALID_PROJECT_JOB);
                 }
             }
