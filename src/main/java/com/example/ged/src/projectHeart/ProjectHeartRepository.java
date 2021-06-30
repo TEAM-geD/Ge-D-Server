@@ -12,5 +12,5 @@ import java.util.List;
 public interface ProjectHeartRepository extends CrudRepository<ProjectHeart,Integer> {
     Boolean existsByUserInfoAndProjectAndStatus(UserInfo userInfo, Project project, String status);
     ProjectHeart findAllByUserInfoAndProjectAndStatus(UserInfo userInfo, Project project, String status);
-    List<ProjectHeart> findAllByUserInfoAndStatus(UserInfo userInfo, String status);
+    List<ProjectHeart> findAllByUserInfoAndStatusOrderByProjectHeartIdxDesc(UserInfo userInfo, String status);
 }

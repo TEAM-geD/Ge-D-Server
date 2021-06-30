@@ -37,7 +37,7 @@ public class ProjectProvider {
         List<GetProjectsRes> getProjectsResList = new ArrayList<>();
         List<Project> projectList = null;
         if(type.equals("ALL")){
-            projectList = projectRepository.findProjectByStatus("ACTIVE");
+            projectList = projectRepository.findProjectByStatusOrderByProjectIdxDesc("ACTIVE");
         }else{
             projectList = projectRepository.findProjectByProjectJobName(type,"ACTIVE");
         }

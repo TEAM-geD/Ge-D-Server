@@ -47,7 +47,7 @@ public class ProjectHeartProvider {
      */
     public List<GetProjectsHeartRes> getProjectsHeartList(Integer userIdx) throws BaseException{
         UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
-        List<ProjectHeart> projectHeartList = projectHeartRepository.findAllByUserInfoAndStatus(userInfo,"ACTIVE");
+        List<ProjectHeart> projectHeartList = projectHeartRepository.findAllByUserInfoAndStatusOrderByProjectHeartIdxDesc(userInfo,"ACTIVE");
 
         List<GetProjectsHeartRes> getProjectsHeartResList = new ArrayList<>();
 
