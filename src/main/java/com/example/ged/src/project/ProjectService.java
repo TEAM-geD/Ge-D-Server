@@ -77,10 +77,11 @@ public class ProjectService {
     @Transactional
     public void deleteProject(Integer userIdx, Integer projectIdx) throws BaseException{
         Project project = projectRepository.findProjectByProjectIdxAndStatus(projectIdx,"ACTIVE");
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
         if(project == null){
             throw new BaseException(FAILED_TO_GET_PROJECT);
         }
-        if(userIdx!=project.getUserInfo().getUserIdx()){
+        if(userInfo!=project.getUserInfo()){
             throw new BaseException(NOT_YOUR_PROJECT);
         }
         project.setStatus("INACTIVE");
