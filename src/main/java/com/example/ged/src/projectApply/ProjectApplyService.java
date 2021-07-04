@@ -36,7 +36,7 @@ public class ProjectApplyService {
             throw new BaseException(ALREADY_POST_PROJECT_APPLY);
         }
 
-        ProjectApply projectApply = new ProjectApply(userInfo,project,"APPLY");
+        ProjectApply projectApply = new ProjectApply(userInfo,project,"WAITING");
 
         //todo : FCM 알림 넣기
         try{
