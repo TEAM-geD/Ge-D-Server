@@ -35,4 +35,10 @@ public class ProjectApply extends BaseEntity {
 
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
+
+    public ProjectApply(UserInfo userInfo,Project project,String applyStatus){
+        this.userInfo = userInfo;
+        this.project = project;
+        this.applyStatus = applyStatus;
+    }
 }
