@@ -329,7 +329,7 @@ public class UserInfoController {
      */
     @ResponseBody
     @GetMapping("/members")
-    public BaseResponse<List<GetMembersRes>> getMembers(@RequestParam String job) throws BaseException {
+    public BaseResponse<List<GetMembersRes>> getMembersList(@RequestParam String job) throws BaseException {
         Integer jwtUserIdx;
         try {
             jwtUserIdx = jwtService.getUserIdx();
@@ -355,6 +355,34 @@ public class UserInfoController {
             List<GetMembersRes> getMembersResList = userInfoProvider.retrieveMembers(job);
             return new BaseResponse<>(SUCCESS,getMembersResList);
         } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+    /**
+     * 멤버스 상세 조회 API
+     * @param projectStatus
+     * @return
+     */
+    @GetMapping("/members/{userIdx}")
+    @ResponseBody
+    @Operation
+    public BaseResponse<GetMyInfoRes> getMembers(@RequestParam(value = "projectStatus",required = true) Integer projectStatus,
+                                                @PathVariable(required = true,value = "userIdx")Integer userIdx){
+        ArrayList<Integer> projectStatusList = new ArrayList<>();
+        projectStatusList.add(0);
+        projectStatusList.add(1);
+        projectStatusList.add(2);
+        projectStatusList.add(3);
+
+        if(!projectStatusList.contains(projectStatus)){
+            return new BaseResponse<>(INVALID_PROJECT_STATUS);
+        }
+
+        try{
+            Integer userJwtIdx = jwtService.getUserIdx();
+            GetMyInfoRes getMyInfoRes = userInfoProvider.getMyInfoRes(userIdx,projectStatus);
+            return new BaseResponse<>(SUCCESS,getMyInfoRes);
+        }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }
@@ -398,4 +426,6 @@ public class UserInfoController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+
 }
