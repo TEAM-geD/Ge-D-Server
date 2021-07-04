@@ -31,6 +31,9 @@ public class ProjectApplyService {
         UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
         Project project = projectProvider.retrieveProjectByProjectIdx(postProjectApplyReq.getProjectIdx());
 
+        if(project.getProjectStatus()!=0){
+            throw new BaseException(EXPIRED_PROJECT_APPLY);
+        }
 
         if(projectApplyRepository.findAllByProjectAndUserInfoAndStatus(project,userInfo,"ACTIVE") != null){
             throw new BaseException(ALREADY_POST_PROJECT_APPLY);
