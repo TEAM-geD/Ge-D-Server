@@ -44,6 +44,27 @@ public class ProjectApplyService {
         }catch (Exception exception){
             throw new BaseException(FAILED_TO_SAVE_PROJECT_APPLY);
         }
+    }
 
+    /**
+     * 프로젝트 참여 신청 취소하기
+     * @param userIdx
+     * @param postProjectApplyReq
+     * @throws BaseException
+     */
+    @Transactional
+    public void deleteProjectApply(Integer userIdx, PostProjectApplyReq postProjectApplyReq) throws BaseException{
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        Project project = projectProvider.retrieveProjectByProjectIdx(postProjectApplyReq.getProjectIdx());
+
+        ProjectApply projectApply = projectApplyRepository.findAllByProjectAndUserInfoAndStatus(project,userInfo,"ACTIVE");
+        if(projectApply == null){
+            throw new BaseException(DID_NOT_APPLY_PROJECT_YET);
+        }
+        try{
+            projectApplyRepository.delete(projectApply);
+        }catch (Exception exception){
+            throw new BaseException(FAILED_TO_DELETE_PROJECT_APPLY);
+        }
     }
 }

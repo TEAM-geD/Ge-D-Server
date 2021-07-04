@@ -36,4 +36,17 @@ public class ProjectApplyController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    @PostMapping("projects/dis-join")
+    @ResponseBody
+    @Operation(summary = "프로젝트 참여 신청 취소하기")
+    public BaseResponse<String> deleteProjectApply(@RequestBody PostProjectApplyReq postProjectApplyReq){
+        try{
+            Integer userIdx = jwtService.getUserIdx();
+            projectApplyService.deleteProjectApply(userIdx,postProjectApplyReq);
+            return new BaseResponse<>(SUCCESS);
+        }catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }

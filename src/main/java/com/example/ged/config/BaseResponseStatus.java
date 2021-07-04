@@ -76,6 +76,8 @@ public enum BaseResponseStatus {
     FAILED_TO_SAVE_PROJECT_HEART(false,3025,"프로젝트 찜하기/취소 에 실패했습니다."),
     ALREADY_POST_PROJECT_APPLY(false,3026,"이미 해당 프로젝트에 참여 신청한 내역이 있습니다."),
     FAILED_TO_SAVE_PROJECT_APPLY(false,3027,"프로젝트 참여 신청에 실패하였습니다."),
+    DID_NOT_APPLY_PROJECT_YET(false,3028,"아직 해당 프로젝트에 참여 신청한 적이 없습니다."),
+    FAILED_TO_DELETE_PROJECT_APPLY(false,3029,"프로젝트 참여 신청 취소에 실패하였습니다."),
 
     // 4000 : Database 오류
     SERVER_ERROR(false, 4000, "서버와의 통신에 실패하였습니다."),
