@@ -1,6 +1,7 @@
 package com.example.ged.src.project;
 
 import com.example.ged.src.project.models.Project;
+import com.example.ged.src.user.models.UserInfo;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,7 @@ public interface ProjectRepository extends CrudRepository<Project,Integer> {
     List<Project> findProjectByProjectJobName(String projectName,String status);
 
     Project findProjectByProjectIdxAndStatus(Integer projectIdx, String status);
+
+    List<Project> findTop2ByUserInfoAndStatusOrderByProjectIdxDesc(UserInfo userInfo, String status);
+
 }

@@ -1,9 +1,19 @@
 package com.example.ged.src.user;
 
 import com.example.ged.config.BaseException;
+import com.example.ged.src.project.ProjectJobRepository;
+import com.example.ged.src.project.ProjectRepository;
+import com.example.ged.src.project.models.Project;
+import com.example.ged.src.project.models.ProjectJob;
+import com.example.ged.src.project.models.dto.GetProjectsRes;
+import com.example.ged.src.projectApply.ProjectApplyRepository;
+import com.example.ged.src.projectApply.models.ProjectApply;
 import com.example.ged.src.user.models.GetMembersRes;
 import com.example.ged.src.user.models.GetUserInfoRes;
 import com.example.ged.src.user.models.UserInfo;
+import com.example.ged.src.user.models.dto.GetMyInfoRes;
+import com.example.ged.src.user.models.dto.GetMyProjectInfoRes;
+import com.example.ged.src.user.models.dto.GetProjectMemberProfile;
 import com.example.ged.src.userSns.UserSnsRepository;
 import com.example.ged.src.userSns.models.UserSns;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +29,9 @@ import static com.example.ged.config.BaseResponseStatus.*;
 public class UserInfoProvider {
     private final UserInfoRepository userInfoRepository;
     private final UserSnsRepository userSnsRepository;
+    private final ProjectRepository projectRepository;
+    private final ProjectJobRepository projectJobRepository;
+    private final ProjectApplyRepository projectApplyRepository;
     /**
      * 유저조회
      * @return User
@@ -129,4 +142,125 @@ public class UserInfoProvider {
     }
 
 
+
+    public GetMyInfoRes getMyInfoRes(Integer userIdx, Integer projectStatus) throws BaseException{
+        UserInfo userInfo = retrieveUserByUserIdx(userIdx);
+
+        List<UserSns> userSnsList = userSnsRepository.findByUserInfoAndStatus(userInfo,"ACTIVE"); ;
+
+        List<String> userSnsUrlList = new ArrayList<>();
+        for(int i=0;i<userSnsList.size();i++){
+            userSnsUrlList.add(userSnsList.get(i).getSnsUrl());
+        }
+
+        /**
+         * 내가 만든 프로젝트 관련
+         */
+        List<GetMyProjectInfoRes> myProjectInfoList = new ArrayList<>();
+        List<Project> myProjectList = projectRepository.findTop2ByUserInfoAndStatusOrderByProjectIdxDesc(userInfo,"ACTIVE");
+        for(Project project : myProjectList){
+            /**
+             * 프로젝트 직군 가져오기
+             */
+            List<ProjectJob> projectJobList = projectJobRepository.findAllByProject(project);
+            List<String> projectJobNameList = new ArrayList<>();
+
+            for(ProjectJob projectJob : projectJobList){
+                projectJobNameList.add(projectJob.getProjectJobName());
+            }
+
+            /**
+             * 프로젝트 참여한 사람들 정보 가져오기
+             */
+            List<GetProjectMemberProfile> projectTeamInfoList = new ArrayList<>();
+            List<ProjectApply> projectApplyList = projectApplyRepository.findAllByProjectAndApplyStatusAndStatus(project,"CONFIRMED","ACTIVE");
+            for(ProjectApply projectApply : projectApplyList){
+                GetProjectMemberProfile getProjectMemberProfile = new GetProjectMemberProfile(projectApply.getUserInfo().getUserIdx(),
+                        projectApply.getUserInfo().getProfileImageUrl());
+                projectTeamInfoList.add(getProjectMemberProfile);
+            }
+
+
+            GetMyProjectInfoRes getProjectsRes  = new GetMyProjectInfoRes(project.getProjectIdx(),
+                    project.getProjectThumbnailImageUrl(),
+                    project.getProjectName(),
+                    project.getProjectStatus(),
+                    projectJobNameList,
+                    project.getUserInfo().getUserIdx(),
+                    project.getUserInfo().getUserName(),
+                    project.getUserInfo().getUserJob(),
+                    projectTeamInfoList);
+            myProjectInfoList.add(getProjectsRes);
+        }
+        /**
+         *  내가 참여한 프로젝트 관련
+         */
+        List<GetMyProjectInfoRes> myApplyProjectInfoList = new ArrayList<>();
+        List<ProjectApply> myApplyProjectList = projectApplyRepository.findAllByUserInfoAndApplyStatusAndStatusOrderByProjectApplyIdx(userInfo,"CONFIRMED","ACTIVE");
+
+        int cnt = 0;
+
+        for(ProjectApply projectApply : myApplyProjectList){
+
+            Project project = projectApply.getProject();
+            if(cnt == 4){
+                break;
+            }
+
+            if(projectStatus == 0){
+                if(project.getProjectStatus()!=0){
+                    continue;
+                }
+            }else if(projectStatus==1){
+                if(project.getProjectStatus()!=1){
+                    continue;
+                }
+            }else if(projectStatus == 2){
+                if(project.getProjectStatus()!=2){
+                    continue;
+                }
+            }
+
+            /**
+             * 프로젝트 직군 가져오기
+             */
+            List<ProjectJob> projectJobList = projectJobRepository.findAllByProject(project);
+            List<String> projectJobNameList = new ArrayList<>();
+
+            for(ProjectJob projectJob : projectJobList){
+                projectJobNameList.add(projectJob.getProjectJobName());
+            }
+
+            /**
+             * 프로젝트 참여한 사람들 정보 가져오기
+             */
+            List<GetProjectMemberProfile> projectTeamInfoList = new ArrayList<>();
+            List<ProjectApply> projectApplyList = projectApplyRepository.findAllByProjectAndApplyStatusAndStatus(project,"CONFIRMED","ACTIVE");
+            for(ProjectApply teamApply : projectApplyList){
+                GetProjectMemberProfile getProjectMemberProfile = new GetProjectMemberProfile(teamApply.getUserInfo().getUserIdx(),
+                        teamApply.getUserInfo().getProfileImageUrl());
+                projectTeamInfoList.add(getProjectMemberProfile);
+            }
+
+            GetMyProjectInfoRes getProjectsRes  = new GetMyProjectInfoRes(project.getProjectIdx(),
+                    project.getProjectThumbnailImageUrl(),
+                    project.getProjectName(),
+                    project.getProjectStatus(),
+                    projectJobNameList,
+                    project.getUserInfo().getUserIdx(),
+                    project.getUserInfo().getUserName(),
+                    project.getUserInfo().getUserJob(),
+                    projectTeamInfoList);
+            myApplyProjectInfoList.add(getProjectsRes);
+            cnt++;
+        }
+        GetMyInfoRes getMyInfoRes = new GetMyInfoRes(userInfo.getUserName(),
+                userInfo.getUserJob(),
+                userInfo.getProfileImageUrl(),
+                userInfo.getIntroduce(),
+                userSnsUrlList,
+                myProjectInfoList,
+                myApplyProjectInfoList);
+        return getMyInfoRes;
+    }
 }

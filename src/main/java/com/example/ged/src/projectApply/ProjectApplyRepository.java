@@ -12,4 +12,9 @@ public interface ProjectApplyRepository extends CrudRepository<ProjectApply,Inte
 
 
     List<ProjectApply> findAllByProjectAndApplyStatusAndStatus(Project project, String applyStatus, String status);
+
+
+    List<ProjectApply> findAllByUserInfoAndApplyStatusAndStatusOrderByProjectApplyIdx(UserInfo userInfo, String applyStatus, String status);
+
+
 }

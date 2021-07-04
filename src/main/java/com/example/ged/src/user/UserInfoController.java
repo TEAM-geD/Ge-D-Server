@@ -3,7 +3,9 @@ package com.example.ged.src.user;
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.src.user.models.*;
+import com.example.ged.src.user.models.dto.GetMyInfoRes;
 import com.example.ged.utils.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -353,6 +355,46 @@ public class UserInfoController {
             List<GetMembersRes> getMembersResList = userInfoProvider.retrieveMembers(job);
             return new BaseResponse<>(SUCCESS,getMembersResList);
         } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+    /**
+     * 마이페이지 조회 API
+     * @param projectStatus
+     * @return
+     */
+    @GetMapping("/users/{userIdx}")
+    @ResponseBody
+    @Operation
+    public BaseResponse<GetMyInfoRes> getMyInfo(@RequestParam(value = "projectStatus",required = true) Integer projectStatus,
+                                                @PathVariable(required = true,value = "userIdx")Integer userIdx){
+        /**
+         * projectStatus == 0 : 모집중
+         * projectStatus == 1 : 진행중
+         * projectStatus == 2 :  마감
+         * projectStatus == 3 : 전체
+         *
+         */
+        ArrayList<Integer> projectStatusList = new ArrayList<>();
+        projectStatusList.add(0);
+        projectStatusList.add(1);
+        projectStatusList.add(2);
+        projectStatusList.add(3);
+
+        if(!projectStatusList.contains(projectStatus)){
+            return new BaseResponse<>(INVALID_PROJECT_STATUS);
+        }
+
+        try{
+            Integer userJwtIdx = jwtService.getUserIdx();
+            if(userIdx != userJwtIdx){
+                return new BaseResponse<>(DIFFERENT_USER_INDEX_AND_JWT);
+            }
+            GetMyInfoRes getMyInfoRes = userInfoProvider.getMyInfoRes(userIdx,projectStatus);
+            return new BaseResponse<>(SUCCESS,getMyInfoRes);
+        }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }
