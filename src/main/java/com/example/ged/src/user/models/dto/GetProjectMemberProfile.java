@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 public class GetProjectMemberProfile {
     private final Integer userIdx;
-    private final String projectThumbnailImageUrl;
+    private final String userProfileImageUrl;
 }
