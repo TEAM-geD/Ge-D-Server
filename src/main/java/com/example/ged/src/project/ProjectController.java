@@ -282,6 +282,25 @@ public class ProjectController {
         }
     }
 
+    /**
+     * 2021-07-11
+     * 프로젝트 모집 마감하기 API"
+     * @param projectIdx
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/projects/{projectIdx}/projectStatus")
+    @Operation(summary = "프로젝트 모집 마감하기 API")
+    public BaseResponse<String> finishProjectApply(@PathVariable(required = true,value = "projectIdx") Integer projectIdx){
+        try{
+            Integer userIdx=  jwtService.getUserIdx();
+            projectService.finishProjectApply(userIdx,projectIdx);
+            return new BaseResponse<>(SUCCESS);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
 
 
 }

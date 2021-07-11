@@ -88,7 +88,7 @@ public class ProjectService {
         try{
             projectRepository.save(project);
         }catch (Exception exception){
-            throw new BaseException(FAILED_TO_POST_PROJECT);
+            throw new BaseException(FAILED_TO_POST_PROJECT);//todo failed to delete project 로 수정
         }
     }
 
@@ -159,6 +159,32 @@ public class ProjectService {
         }
 
     }
+
+    /**
+     * 프로젝트 모집 마감하기
+     * @param userIdx
+     * @param projectIdx
+     * @throws BaseException
+     */
+    @Transactional
+    public void finishProjectApply(Integer userIdx, Integer projectIdx) throws BaseException{
+        Project project = projectRepository.findProjectByProjectIdxAndStatus(projectIdx,"ACTIVE");
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        if(project == null){
+            throw new BaseException(FAILED_TO_GET_PROJECT);
+        }
+        if(userInfo!=project.getUserInfo()){
+            throw new BaseException(NOT_YOUR_PROJECT);
+        }
+        project.setProjectStatus(1);
+        try{
+            projectRepository.save(project);
+        }catch (Exception exception){
+            throw new BaseException(FAILED_TO_POST_PROJECT); //todo failed to change projectStatus 로 수정
+        }
+    }
+
+
 
 
 }
