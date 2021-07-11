@@ -310,6 +310,9 @@ public class ProjectController {
     @Operation(summary = "프로젝트 결과물 등록하기 API")
     public BaseResponse<String> postProjectResult(@PathVariable(required = true,value = "projectIdx")Integer projectIdx,
                                                   @RequestBody PostProjectResultReq postProjectResultReq){
+        if(postProjectResultReq.getProjectResultUrl() == null || postProjectResultReq.getProjectResultUrl().length() == 0){
+            return new BaseResponse<>(EMPTY_PROJECT_RESULT_URL);
+        }
         try{
             Integer userIdx=  jwtService.getUserIdx();
             projectService.postProjectResult(userIdx,projectIdx,postProjectResultReq);
