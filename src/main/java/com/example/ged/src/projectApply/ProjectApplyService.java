@@ -4,6 +4,7 @@ import com.example.ged.config.BaseException;
 import com.example.ged.src.project.ProjectProvider;
 import com.example.ged.src.project.models.Project;
 import com.example.ged.src.projectApply.models.ProjectApply;
+import com.example.ged.src.projectApply.models.dto.PatchProjectMemberReq;
 import com.example.ged.src.projectApply.models.dto.PostProjectApplyReq;
 import com.example.ged.src.user.UserInfoProvider;
 import com.example.ged.src.user.models.UserInfo;
@@ -39,7 +40,7 @@ public class ProjectApplyService {
             throw new BaseException(ALREADY_POST_PROJECT_APPLY);
         }
 
-        ProjectApply projectApply = new ProjectApply(userInfo,project,"WAITING");
+        ProjectApply projectApply = new ProjectApply(userInfo,project,"CONFIRMED");
 
         //todo : FCM 알림 넣기
         try{
@@ -66,6 +67,33 @@ public class ProjectApplyService {
         }
         try{
             projectApplyRepository.delete(projectApply);
+        }catch (Exception exception){
+            throw new BaseException(FAILED_TO_DELETE_PROJECT_APPLY);
+        }
+    }
+
+    /**
+     * 프로젝트 멤버 삭제하기
+     * @param projectIdx
+     * @param userIdx
+     * @param patchProjectMemberReq
+     * @throws BaseException
+     */
+    @Transactional
+    public void deleteProjectMember(Integer projectIdx, Integer userIdx, PatchProjectMemberReq patchProjectMemberReq) throws BaseException{
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        Project project = projectProvider.retrieveProjectByProjectIdx(projectIdx);
+        if(project.getUserInfo() != userInfo){
+            throw new BaseException(NOT_YOUR_PROJECT);
+        }
+        UserInfo deleteUserInfo = userInfoProvider.retrieveUserByUserIdx(patchProjectMemberReq.getUserIdx());
+        ProjectApply projectApply = projectApplyRepository.findAllByProjectAndUserInfoAndStatus(project,deleteUserInfo,"ACTIVE");
+        if(projectApply == null){
+            throw new BaseException(DID_NOT_APPLY_PROJECT_YET);
+        }
+        projectApply.setStatus("INACTIVE");
+        try{
+            projectApplyRepository.save(projectApply);
         }catch (Exception exception){
             throw new BaseException(FAILED_TO_DELETE_PROJECT_APPLY);
         }

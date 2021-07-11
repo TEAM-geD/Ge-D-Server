@@ -3,8 +3,10 @@ package com.example.ged.src.projectApply;
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.src.projectApply.models.dto.GetProjectMembersRes;
+import com.example.ged.src.projectApply.models.dto.PatchProjectMemberReq;
 import com.example.ged.src.projectApply.models.dto.PostProjectApplyReq;
 import com.example.ged.utils.JwtService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +74,28 @@ public class ProjectApplyController {
             Integer userIdx = jwtService.getUserIdx();
             GetProjectMembersRes getProjectMembersRes = projectApplyProvider.getProjectMembers(projectIdx);
             return new BaseResponse<>(SUCCESS ,  getProjectMembersRes);
+        }catch(BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
+    /**
+     * 2021-07-11
+     * 프로젝트 참여 멤버 삭제하기 API
+     * @param projectIdx
+     * @param patchProjectMemberReq
+     * @return
+     */
+    @PatchMapping("/projects/{projectIdx}/members")
+    @ResponseBody
+    @Operation(summary = "프로젝트 참여 멤버 제거하기 API")
+    public BaseResponse<String> deleteProjectMember(@PathVariable Integer projectIdx,
+                                                    @RequestBody PatchProjectMemberReq patchProjectMemberReq){
+        try{
+            Integer userIdx = jwtService.getUserIdx();
+            projectApplyService.deleteProjectMember(projectIdx,userIdx,patchProjectMemberReq);
+            return new BaseResponse<>(SUCCESS);
         }catch(BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
