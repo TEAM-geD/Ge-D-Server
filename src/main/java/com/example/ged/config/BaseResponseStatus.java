@@ -81,6 +81,12 @@ public enum BaseResponseStatus {
     DID_NOT_APPLY_PROJECT_YET(false,3028,"아직 해당 프로젝트에 참여 신청한 적이 없습니다."),
     FAILED_TO_DELETE_PROJECT_APPLY(false,3029,"프로젝트 참여 신청 취소에 실패하였습니다."),
     EXPIRED_PROJECT_APPLY(false,3030,"모집 마감된 프로젝트입니다."),
+    FAILED_TO_DELETE_PROJECT(false,3031,"프로젝트 삭제에 실패했습니다."),
+    FAILED_TO_UPDATE_PROJECT(false,3032,"프로젝트 수정에 실패했습니다."),
+    FAILED_TO_FINISH_PROJECT_APPLY(false,3033,"프로젝트 모집 마감하는데 실패했습니다."),
+    FAILED_TO_POST_PROJECT_RESULT(false,3034,"프로젝트 결과물 등록에 실패했습니다."),
+
+
 
 
     // 4000 : Database 오류

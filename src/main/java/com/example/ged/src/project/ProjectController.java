@@ -3,10 +3,7 @@ package com.example.ged.src.project;
 import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.config.BaseResponseStatus;
-import com.example.ged.src.project.models.dto.GetProjectRes;
-import com.example.ged.src.project.models.dto.GetProjectsRes;
-import com.example.ged.src.project.models.dto.PatchProjectReq;
-import com.example.ged.src.project.models.dto.PostProjectReq;
+import com.example.ged.src.project.models.dto.*;
 import com.example.ged.utils.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -289,7 +286,7 @@ public class ProjectController {
      * @return
      */
     @ResponseBody
-    @PostMapping("/projects/{projectIdx}/projectStatus")
+    @PatchMapping("/projects/{projectIdx}/projectStatus")
     @Operation(summary = "프로젝트 모집 마감하기 API")
     public BaseResponse<String> finishProjectApply(@PathVariable(required = true,value = "projectIdx") Integer projectIdx){
         try{
@@ -301,6 +298,24 @@ public class ProjectController {
         }
     }
 
-
-
+    /**
+     * 2021-07-11
+     * 프로젝트 결과물 등록하기 API
+     * @param projectIdx
+     * @param postProjectResultReq
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/projects/{projectIdx}/result")
+    @Operation(summary = "프로젝트 결과물 등록하기 API")
+    public BaseResponse<String> postProjectResult(@PathVariable(required = true,value = "projectIdx")Integer projectIdx,
+                                                  @RequestBody PostProjectResultReq postProjectResultReq){
+        try{
+            Integer userIdx=  jwtService.getUserIdx();
+            projectService.postProjectResult(userIdx,projectIdx,postProjectResultReq);
+            return new BaseResponse<>(SUCCESS);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }

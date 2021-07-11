@@ -64,6 +64,9 @@ public class Project extends BaseEntity {
     @Column(name="projectStatus",length = 10)
     private Integer projectStatus;//프로젝트 상태
 
+    @Column(name="projectResultUrl",columnDefinition = "TEXT")
+    private String projectResultUrl;//프로젝트 결과물 url
+
     @Column(name="status",nullable = false)
     private String status = "ACTIVE";
 

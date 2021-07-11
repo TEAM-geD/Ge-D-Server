@@ -1,11 +1,13 @@
 package com.example.ged.src.project;
 
 import com.example.ged.config.BaseException;
+import com.example.ged.config.BaseResponse;
 import com.example.ged.src.project.models.Project;
 import com.example.ged.src.project.models.ProjectCategory;
 import com.example.ged.src.project.models.ProjectJob;
 import com.example.ged.src.project.models.dto.PatchProjectReq;
 import com.example.ged.src.project.models.dto.PostProjectReq;
+import com.example.ged.src.project.models.dto.PostProjectResultReq;
 import com.example.ged.src.user.UserInfoProvider;
 import com.example.ged.src.user.models.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -88,7 +90,7 @@ public class ProjectService {
         try{
             projectRepository.save(project);
         }catch (Exception exception){
-            throw new BaseException(FAILED_TO_POST_PROJECT);//todo failed to delete project 로 수정
+            throw new BaseException(FAILED_TO_DELETE_PROJECT);
         }
     }
 
@@ -155,7 +157,7 @@ public class ProjectService {
         try{
             projectRepository.save(project);
         }catch (Exception exception){
-            throw new BaseException(FAILED_TO_POST_PROJECT);
+            throw new BaseException(FAILED_TO_UPDATE_PROJECT);
         }
 
     }
@@ -180,11 +182,35 @@ public class ProjectService {
         try{
             projectRepository.save(project);
         }catch (Exception exception){
-            throw new BaseException(FAILED_TO_POST_PROJECT); //todo failed to change projectStatus 로 수정
+            throw new BaseException(FAILED_TO_FINISH_PROJECT_APPLY);
         }
     }
 
-
-
-
+    /**
+     * 프로젝트 결과물 등록하기
+     * @param userIdx
+     * @param projectIdx
+     * @param postProjectResultReq
+     * @throws BaseException
+     */
+    @Transactional
+    public void postProjectResult(Integer userIdx, Integer projectIdx, PostProjectResultReq postProjectResultReq) throws BaseException{
+        Project project = projectRepository.findProjectByProjectIdxAndStatus(projectIdx,"ACTIVE");
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        if(project == null){
+            throw new BaseException(FAILED_TO_GET_PROJECT);
+        }
+        if(userInfo!=project.getUserInfo()){
+            throw new BaseException(NOT_YOUR_PROJECT);
+        }
+        //프로젝트 마감상태로 바꿈
+        project.setProjectStatus(2);
+        //프로젝트 결과물 등록
+        project.setProjectResultUrl(postProjectResultReq.getProjectResultUrl());
+        try{
+            projectRepository.save(project);
+        }catch (Exception exception){
+            throw new BaseException(FAILED_TO_POST_PROJECT_RESULT);
+        }
+    }
 }
