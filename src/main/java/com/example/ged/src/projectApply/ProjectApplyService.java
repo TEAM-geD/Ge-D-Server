@@ -95,7 +95,7 @@ public class ProjectApplyService {
         try{
             projectApplyRepository.save(projectApply);
         }catch (Exception exception){
-            throw new BaseException(FAILED_TO_DELETE_PROJECT_APPLY);
+            throw new BaseException(FAILED_TO_DELETE_PROJECT_APPLY_MEMBER);
         }
     }
 }

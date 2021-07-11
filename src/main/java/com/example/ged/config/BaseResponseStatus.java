@@ -86,6 +86,7 @@ public enum BaseResponseStatus {
     FAILED_TO_UPDATE_PROJECT(false,3032,"프로젝트 수정에 실패했습니다."),
     FAILED_TO_FINISH_PROJECT_APPLY(false,3033,"프로젝트 모집 마감하는데 실패했습니다."),
     FAILED_TO_POST_PROJECT_RESULT(false,3034,"프로젝트 결과물 등록에 실패했습니다."),
+    FAILED_TO_DELETE_PROJECT_APPLY_MEMBER(false,3035,"프로젝트 멤버 삭제에 실패햇습니다."),
 
 
 
