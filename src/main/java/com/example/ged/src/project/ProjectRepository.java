@@ -20,4 +20,5 @@ public interface ProjectRepository extends CrudRepository<Project,Integer> {
 
     List<Project> findTop2ByUserInfoAndStatusOrderByProjectIdxDesc(UserInfo userInfo, String status);
 
+    List<Project> findAllByUserInfoAndStatusOrderByProjectIdxDesc(UserInfo userInfo, String status);
 }

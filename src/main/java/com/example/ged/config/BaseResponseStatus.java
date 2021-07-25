@@ -50,6 +50,7 @@ public enum BaseResponseStatus {
     INVALID_PROJECT_STATUS(false,2036,"잘못된 프로젝트 상태입니다."),
     DIFFERENT_USER_INDEX_AND_JWT(false,2037,"URI 의 유저 인덱스와 JWT 유저 인덱스가 다릅니다."),
     EMPTY_PROJECT_RESULT_URL(false,2038,"프로젝트 결과물을 입력해주세요."),
+    INVALID_SELECT_TYPE(false,2039,"올바른 타입을 선택해주세요."),
 
     // 3000 : Response 오류
     FAILED_TO_GET_USER_JOB_CATEGORIES(false,3001,"직군 카테고리 조회에 실패하였습니다."),
