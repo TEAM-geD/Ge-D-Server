@@ -56,6 +56,11 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.13.1'
 
 	implementation group: 'com.nimbusds', name: 'nimbus-jose-jwt', version: '3.10'
+
+	// firebase sdk
+	implementation 'com.google.firebase:firebase-admin:6.8.1'
+
+	implementation 'org.json:json:20171018'
 }
 
 test {

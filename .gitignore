@@ -7,6 +7,7 @@ build/
 application-rds.yml
 application.yml
 secret/
+ged-service-account-key.json
 
 ### STS ###
 .apt_generated

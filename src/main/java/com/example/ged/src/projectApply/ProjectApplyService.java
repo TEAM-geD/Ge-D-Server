@@ -23,14 +23,12 @@ public class ProjectApplyService {
 
     /**
      * 프로젝트 참여 신청하기
-     * @param userIdx
-     * @param postProjectApplyReq
+     * @param userInfo
+     * @param project
      * @throws BaseException
      */
     @Transactional
-    public void postProjectApply(Integer userIdx, PostProjectApplyReq postProjectApplyReq) throws BaseException{
-        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
-        Project project = projectProvider.retrieveProjectByProjectIdx(postProjectApplyReq.getProjectIdx());
+    public void postProjectApply(UserInfo userInfo,Project project) throws BaseException{
 
         if(project.getProjectStatus()!=0){
             throw new BaseException(EXPIRED_PROJECT_APPLY);
@@ -44,6 +42,8 @@ public class ProjectApplyService {
 
         //todo : FCM 알림 넣기
         try{
+
+
             projectApplyRepository.save(projectApply);
         }catch (Exception exception){
             throw new BaseException(FAILED_TO_SAVE_PROJECT_APPLY);
