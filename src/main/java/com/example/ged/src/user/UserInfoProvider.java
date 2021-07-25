@@ -13,6 +13,7 @@ import com.example.ged.src.user.models.GetUserInfoRes;
 import com.example.ged.src.user.models.UserInfo;
 import com.example.ged.src.user.models.dto.GetMyInfoRes;
 import com.example.ged.src.user.models.dto.GetMyProjectInfoRes;
+import com.example.ged.src.user.models.dto.GetMyProjectsRes;
 import com.example.ged.src.user.models.dto.GetProjectMemberProfile;
 import com.example.ged.src.userSns.UserSnsRepository;
 import com.example.ged.src.userSns.models.UserSns;
@@ -263,4 +264,64 @@ public class UserInfoProvider {
                 myApplyProjectInfoList);
         return getMyInfoRes;
     }
+
+    /**
+     * 마이페이지 자세히보기
+     * @param userIdx
+     * @param type
+     * @return
+     * @throws BaseException
+     */
+    public List<GetMyProjectsRes> getMyProjectsRes(Integer userIdx, Integer type) throws BaseException{
+        UserInfo userInfo = retrieveUserByUserIdx(userIdx);
+
+        List<GetMyProjectsRes> getMyProjectsResList = new ArrayList<>();
+        /**
+         * 내가 올린 프로젝트
+         */
+        if(type == 1){
+            List<Project> myProjectList = projectRepository.findAllByUserInfoAndStatusOrderByProjectIdxDesc(userInfo,"ACTIVE");
+
+            for(Project project : myProjectList){
+                List<ProjectJob> projectJobList = projectJobRepository.findAllByProject(project);
+                List<String> projectJobNameList = new ArrayList<>();
+
+                for(ProjectJob projectJob : projectJobList){
+                    projectJobNameList.add(projectJob.getProjectJobName());
+                }
+
+                GetMyProjectsRes getMyProjectsRes = new GetMyProjectsRes(project.getProjectIdx(),project.getProjectThumbnailImageUrl(),
+                        project.getProjectName(),projectJobNameList,project.getProjectStatus(),project.getUserInfo().getUserIdx(),project.getUserInfo().getUserName(),
+                        project.getUserInfo().getUserJob(),project.getUserInfo().getProfileImageUrl());
+
+                getMyProjectsResList.add(getMyProjectsRes);
+            }
+        }
+        /**
+         * 내가 신청한 프로젝트
+         */
+        else if(type == 2){
+            List<ProjectApply> myApplyProjectList = projectApplyRepository.findAllByUserInfoAndApplyStatusAndStatusOrderByProjectApplyIdx(userInfo,"CONFIRMED","ACTIVE");
+
+            for(ProjectApply projectApply : myApplyProjectList){
+                Project project = projectApply.getProject();
+
+                List<ProjectJob> projectJobList = projectJobRepository.findAllByProject(project);
+                List<String> projectJobNameList = new ArrayList<>();
+
+                for(ProjectJob projectJob : projectJobList){
+                    projectJobNameList.add(projectJob.getProjectJobName());
+                }
+
+                GetMyProjectsRes getMyProjectsRes = new GetMyProjectsRes(project.getProjectIdx(),project.getProjectThumbnailImageUrl(),
+                        project.getProjectName(),projectJobNameList,project.getProjectStatus(),project.getUserInfo().getUserIdx(),project.getUserInfo().getUserName(),
+                        project.getUserInfo().getUserJob(),project.getUserInfo().getProfileImageUrl());
+
+                getMyProjectsResList.add(getMyProjectsRes);
+            }
+        }
+        return getMyProjectsResList;
+    }
+
+
 }
