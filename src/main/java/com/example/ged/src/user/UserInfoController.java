@@ -4,6 +4,7 @@ import com.example.ged.config.BaseException;
 import com.example.ged.config.BaseResponse;
 import com.example.ged.src.user.models.*;
 import com.example.ged.src.user.models.dto.GetMyInfoRes;
+import com.example.ged.src.user.models.dto.GetMyProjectsRes;
 import com.example.ged.utils.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -427,5 +428,35 @@ public class UserInfoController {
         }
     }
 
+    /**
+     * 마이페이지 자세히보기 API
+     * @param userIdx
+     * @param type
+     * @return
+     */
+    @GetMapping("/users/{userIdx}/detail")
+    @ResponseBody
+    @Operation
+    public BaseResponse<List<GetMyProjectsRes>> getMyProjectsDetail(@PathVariable(required = true, value = "userIdx")Integer userIdx,
+                                                                    @RequestParam(required = true, value="type")Integer type){
+
+        /**
+         * type == 1 : 내가 만든 프로젝트
+         * type == 2 : 내가 신청한 프로젝트
+         */
+        if(type != 1 && type !=2){
+            return new BaseResponse<>(INVALID_SELECT_TYPE);
+        }
+        try{
+            Integer userJwtIdx = jwtService.getUserIdx();
+            if(userIdx != userJwtIdx){
+                return new BaseResponse<>(DIFFERENT_USER_INDEX_AND_JWT);
+            }
+            List<GetMyProjectsRes> getMyProjectsResList = userInfoProvider.getMyProjectsRes(userIdx,type);
+            return new BaseResponse<>(SUCCESS,getMyProjectsResList);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 
 }
