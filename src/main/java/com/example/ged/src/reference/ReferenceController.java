@@ -86,7 +86,7 @@ public class ReferenceController {
 
 
         try {
-            GetReferenceRes getReferenceRes = referenceProvider.retrieveReference(referenceIdx);
+            GetReferenceRes getReferenceRes = referenceProvider.retrieveReference(referenceIdx,jwtUserIdx);
             return new BaseResponse<>(SUCCESS,getReferenceRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());

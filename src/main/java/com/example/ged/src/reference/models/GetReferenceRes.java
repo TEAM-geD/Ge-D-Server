@@ -8,4 +8,5 @@ import lombok.Getter;
 public class GetReferenceRes {
     private final Integer referenceIdx;
     private final String referenceUrl;
+    private final String isHeart;
 }

@@ -6,12 +6,14 @@ import com.example.ged.src.reference.models.GetReferencesRes;
 import com.example.ged.src.reference.models.Reference;
 import com.example.ged.src.referenceCategory.ReferenceCategoryProvider;
 import com.example.ged.src.referenceCategory.models.ReferenceCategory;
+import com.example.ged.src.referenceHeart.ReferenceHeartRepository;
+import com.example.ged.src.user.UserInfoProvider;
+import com.example.ged.src.user.models.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.example.ged.config.BaseResponseStatus.*;
 
 @Service
@@ -19,6 +21,8 @@ import static com.example.ged.config.BaseResponseStatus.*;
 public class ReferenceProvider {
     private final ReferenceRepository referenceRepository;
     private final ReferenceCategoryProvider referenceCategoryProvider;
+    private final UserInfoProvider userInfoProvider;
+    private final ReferenceHeartRepository referenceHeartRepository;
 
     /**
      * 레퍼런스 리스트 조회 API
@@ -55,21 +59,35 @@ public class ReferenceProvider {
 
     /**
      * 레퍼런스 상세 조회 API
-     * @param referenceIdx
+     * @param referenceIdx,userIdx
      * @return GetReferenceRes
      * @throws BaseException
      */
-    public GetReferenceRes retrieveReference(Integer referenceIdx) throws BaseException {
-        Reference reference;
+    public GetReferenceRes retrieveReference(Integer referenceIdx,Integer userIdx) throws BaseException {
+
+        UserInfo userInfo = userInfoProvider.retrieveUserByUserIdx(userIdx);
+        Reference reference = retrieveReferenceByReferenceIdx(referenceIdx);
+
+        Boolean existReferenceHeart = referenceHeartRepository.existsByUserInfoAndReferenceAndStatus(userInfo,reference,"ACTIVE");
+        String isHeart;
+        if(existReferenceHeart){
+            isHeart="Y";
+        }
+        else{
+            isHeart="N";
+        }
+
+        Reference ref;
+
         try {
-            reference = referenceRepository.findByReferenceIdxAndStatus(referenceIdx,"ACTIVE");
+            ref = referenceRepository.findByReferenceIdxAndStatus(referenceIdx,"ACTIVE");
         } catch (Exception ignored) {
             throw new BaseException(FAILED_TO_FIND_BY_REFERENCEIDX_AND_STATUS);
         }
 
-        String referenceUrl = reference.getReferenceUrl();
+        String referenceUrl = ref.getReferenceUrl();
 
-        return new GetReferenceRes(referenceIdx,referenceUrl);
+        return new GetReferenceRes(referenceIdx,referenceUrl,isHeart);
     }
 
 
